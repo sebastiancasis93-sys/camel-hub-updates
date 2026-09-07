@@ -1,0 +1,629 @@
+{
+  "product": "Camel Hub",
+  "channel": "stable",
+  "version": "1.0.0",
+  "summary": [
+    "Core comun inicial generado desde los cinco bots actuales.",
+    "Solo actualiza codigo comun validado como identico entre personajes."
+  ],
+  "files": [
+    {
+      "path": "cavebot/actions.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/actions.lua",
+      "sha256": "dbfb0c73d50d222855d97da86824acdd16d889b6133906ddff25212090c78ab3",
+      "sha1": "3d543e2c9c36cff2c6915eeb02fac021901ba010"
+    },
+    {
+      "path": "cavebot/bank.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/bank.lua",
+      "sha256": "422ef1e72c6ebb1bfe171abe978d8232074d813fad35b78b6446f4fdc2590187",
+      "sha1": "54a14f3d708b9e5ff57b3eb450748c1b3295a0d9"
+    },
+    {
+      "path": "cavebot/buy_supplies.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/buy_supplies.lua",
+      "sha256": "fd1044496832101240ac4668a5eec3a99f308bc3e095c34960c000673ceb4a26",
+      "sha1": "1fd68c4199aff74b62f953c84363db5ff22473fb"
+    },
+    {
+      "path": "cavebot/cavebot.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/cavebot.lua",
+      "sha256": "5b2ba56db759d91cd0b1208d2d1262b8616ff06dbcdc21fa32fd79414b5394e0",
+      "sha1": "678746ca8c2faea31b176bfd5a689d956f119f61"
+    },
+    {
+      "path": "cavebot/cavebot.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/cavebot.otui",
+      "sha256": "cf171641162fc105d78de1f705333c20a78728967184473159158404b6c8de08",
+      "sha1": "c0175eee276dd6877f3ebd07cae8c586c8a0952b"
+    },
+    {
+      "path": "cavebot/clear_tile.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/clear_tile.lua",
+      "sha256": "469e1bbf7060c06b6ac1a6b3d34a3021364a7c723b674cdb61530306968a52d9",
+      "sha1": "f576e1477ae57d4e4849f300d88c83c32b21aae1"
+    },
+    {
+      "path": "cavebot/config.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/config.lua",
+      "sha256": "dd8e613cb169c763e2babddde1c57f1f72c49d7424335af2caf2e47113944e74",
+      "sha1": "3ca3c5cb26d220b7c5fcbead89ab2ff7cdab7d36"
+    },
+    {
+      "path": "cavebot/config.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/config.otui",
+      "sha256": "e7887006efe3f75b36b7f5bc880162a46b401c858d1a3f29fe566e38080365a4",
+      "sha1": "86d45d3b70bcc1107dea84a7bac92cce8637cbc7"
+    },
+    {
+      "path": "cavebot/d_withdraw.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/d_withdraw.lua",
+      "sha256": "873ef4cbe6e8b0927ba0b3e4bf85151ab341d0bd4f3302904617f2ac752c66b6",
+      "sha1": "ab91b4eab1c60213a6fdf24d4de42ae66543f19e"
+    },
+    {
+      "path": "cavebot/depositor.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/depositor.lua",
+      "sha256": "0cb8a10a0e7e3d328d9f42371881c5a0341f5156ce2e3d34bd6e9d55206c3d2b",
+      "sha1": "e52712cec179822d4eef45260a356c4cc0e9e147"
+    },
+    {
+      "path": "cavebot/doors.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/doors.lua",
+      "sha256": "0cf94a715e266bef867930f7014e058a799c8de7f02a6e7886305616958e0027",
+      "sha1": "fea63683329e6d0ef11f2b04b43f2047debe35d6"
+    },
+    {
+      "path": "cavebot/editor.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/editor.lua",
+      "sha256": "a43f7ad8146671ef50661c37397367fe19fc444dcd89e0a6564744c8e66d5fb5",
+      "sha1": "3031c1134ae1bcd21dfecca8cff922acfebff97a"
+    },
+    {
+      "path": "cavebot/editor.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/editor.otui",
+      "sha256": "5820d5e675bf2b4fcb0bfd8ccc9f2ef52f83205afea3bc218d6135d0e0c1ceec",
+      "sha1": "bd2b354b84a501d98e555001324a851bbd57c2df"
+    },
+    {
+      "path": "cavebot/example_functions.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/example_functions.lua",
+      "sha256": "9bb76b4008bb3c344a76e52184d5917ec8393e05a9f3f12e0fa421c0cfbe0002",
+      "sha1": "e8b134833a318e1eec3ac626f17b4eaf4e2c888b"
+    },
+    {
+      "path": "cavebot/extension_template.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/extension_template.lua",
+      "sha256": "76c2eb50b385acd625bba4660fe1af38390c539a69d94d7206a49c2cc8635063",
+      "sha1": "ee98fafdf7923a66245eaee8917f0fe63e0c9f5e"
+    },
+    {
+      "path": "cavebot/imbuing.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/imbuing.lua",
+      "sha256": "b25343b88da41f4ed0e4b16e24dfcc4373fa94761afcadfe2f8ec29ce91a96cd",
+      "sha1": "a4e1495d42f3d0b8a05bc246c08067ecef59b75c"
+    },
+    {
+      "path": "cavebot/inbox_withdraw.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/inbox_withdraw.lua",
+      "sha256": "84ff63ec70d826c620a5181aac79ea086ee3d25402cbb9f04a94b3dfc88102c2",
+      "sha1": "e93cfde0a0dbd9846e6f9179ad594ae5d8b67080"
+    },
+    {
+      "path": "cavebot/lure.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/lure.lua",
+      "sha256": "133af89967b19d8fee9c531780ee573f5803fedeea7084b8877491ca55cacaf8",
+      "sha1": "4d38d4e6c0f4674ca417f721e930714090b2bbc2"
+    },
+    {
+      "path": "cavebot/minimap.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/minimap.lua",
+      "sha256": "8f6a3fd6a58df43ddbd78b5c212eed1fa46d61a071d13187c808d41872281596",
+      "sha1": "69e057d975155c09ec647059c50eda931a0c928d"
+    },
+    {
+      "path": "cavebot/pos_check.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/pos_check.lua",
+      "sha256": "66349fc2655d914210430e945fe273d55b49502a15ef8224d064343c41b7b137",
+      "sha1": "a69825b61ef6304adf2edc617586e0c6344d82d3"
+    },
+    {
+      "path": "cavebot/recorder.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/recorder.lua",
+      "sha256": "e29e0c0fc749eb59382fcdfbd994c7bb3a699160e68861cefa2ad458e646c3ed",
+      "sha1": "518c1070cefc079be8fb8af83174523035e39834"
+    },
+    {
+      "path": "cavebot/sell_all.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/sell_all.lua",
+      "sha256": "03ccc071bcc87a9a4b660346d0d1d0c7b71848f3a452af75ddf6ebc2b867ece5",
+      "sha1": "1b4c3c0dc1dcdaeff557055f6322eace2a7938d7"
+    },
+    {
+      "path": "cavebot/stand_lure.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/stand_lure.lua",
+      "sha256": "9fd37c5c983d695ef89a4bd80f07f9e903ce4efa4489b9d67a7498d1c5dedc73",
+      "sha1": "a01b8d37efc2070962b61ee70086be430a80702f"
+    },
+    {
+      "path": "cavebot/supply_check.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/supply_check.lua",
+      "sha256": "08361bb73717a82bc55843305761cdddae32a1ccfd9b284b3cd9e3d436537e91",
+      "sha1": "8347f4e7f9d7ae7cf49331eae9cf4d9950ef5af1"
+    },
+    {
+      "path": "cavebot/tasker.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/tasker.lua",
+      "sha256": "cafc1c5c86695464e3877082fd0653015d0b07b20d86adac2e402fbee5a35745",
+      "sha1": "9b6fcf38cbce36f213a8670f8f6da7059171a30f"
+    },
+    {
+      "path": "cavebot/travel.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/travel.lua",
+      "sha256": "10dcf067bce9edc932ca458e9365eeb1360e7f350bf4fc6be8d79d691f2b4a80",
+      "sha1": "a5ee7b7a6638827c44031f1dbd5fe94b845e9214"
+    },
+    {
+      "path": "cavebot/walking.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/walking.lua",
+      "sha256": "1763591e08544ee5394a3d91a8f3396cea5b51c909a363f1c35eb0d63fbb95da",
+      "sha1": "f3a0ffe77024c06e9fb4485991e07e9579a23e95"
+    },
+    {
+      "path": "cavebot/withdraw.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/withdraw.lua",
+      "sha256": "439a886483dbebbbd95cbd5096e8b8032a87643a2d0583431e814f2664b72eca",
+      "sha1": "81046c1eafe41c5ebb61d159a38684b9333cae14"
+    },
+    {
+      "path": "targetbot/creature.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/targetbot/creature.lua",
+      "sha256": "876d014da2da03522286d06cb5a23ad0a561178c0f450a17415b733572205afa",
+      "sha1": "eb3b4d010906dab8087b4c8f9ce0d8ec8c96e522"
+    },
+    {
+      "path": "targetbot/creature_attack.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/targetbot/creature_attack.lua",
+      "sha256": "6518a5f82bdea109829d8612450b0e6eded64068a9e7a0476ea58c70bea3d6fe",
+      "sha1": "5ec620b9a17024f82c4d232a12150beb70442881"
+    },
+    {
+      "path": "targetbot/creature_editor.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/targetbot/creature_editor.lua",
+      "sha256": "d7898fd996d90e0d1be9b011c0ceb74bc6f9a1a94217f28137f74561844046c1",
+      "sha1": "cde6e7993e6b89348ba2d6bc93a9c3b8e5f1b2df"
+    },
+    {
+      "path": "targetbot/creature_editor.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/targetbot/creature_editor.otui",
+      "sha256": "acaa250c78a26d3b00ba6ba3a5a03c3d1f115399b0cfa418886466cc0d7b2dab",
+      "sha1": "857eef1ea4836ea39e8ba1aa0188b4459a5473e0"
+    },
+    {
+      "path": "targetbot/creature_priority.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/targetbot/creature_priority.lua",
+      "sha256": "60be3d96e184eb9069e1e6539a95be445e6e5fe234670070cc1c16449d2adf78",
+      "sha1": "8456d4ef960baa63459bd6735740497bab385eb4"
+    },
+    {
+      "path": "targetbot/looting.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/targetbot/looting.lua",
+      "sha256": "d0d83cb8d4bee53770df197f07825fcbfa3200777965ee02cec45799e01effcf",
+      "sha1": "6a7bc0ecdfe2f3cd1866cc449b7bd3f3c6226bf9"
+    },
+    {
+      "path": "targetbot/looting.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/targetbot/looting.otui",
+      "sha256": "2e868b223beaf4898592780e175e64388003c7faf05eda14eabc34d405f0f2e0",
+      "sha1": "c1c389d6de2fc3a98da24f3a004691901dd85f6a"
+    },
+    {
+      "path": "targetbot/target.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/targetbot/target.lua",
+      "sha256": "24c4e568f839abb769d24f6cd2fd729fa31e4a2eec6646584627e8d29d7c57c3",
+      "sha1": "a7691d261ade6b46bccf34214895b7c48e151375"
+    },
+    {
+      "path": "targetbot/target.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/targetbot/target.otui",
+      "sha256": "9200e33e91bbd2ff20ba657745cd1ffff448763a9f5d88c37a3da4400e9adf2b",
+      "sha1": "6c158466dbc324347b39072cf2f2e2dd83b0dd7e"
+    },
+    {
+      "path": "targetbot/walking.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/targetbot/walking.lua",
+      "sha256": "8a59a0ce748162e562caad93f6aac29e3b25087bef3aed0af7241137e2d65a6d",
+      "sha1": "b1430bf36c8cb9a78a241505a7a2c4c1849327cc"
+    },
+    {
+      "path": "vBot/AttackBot.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/AttackBot.lua",
+      "sha256": "394fcf82f11fd4a9e23f2fd5e9b46fab845ad3395e35b2aeda5927a9f0619af8",
+      "sha1": "45f6ae88ce2c44c82eb0837a18df5c73bba1678e"
+    },
+    {
+      "path": "vBot/AttackBot.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/AttackBot.otui",
+      "sha256": "4143b2a89f45bce7ef73816b36ae09637057e5bdd40be17627bd58e1495553fd",
+      "sha1": "d8bd6db937928de1581c53aa64cd01964e0bd42e"
+    },
+    {
+      "path": "vBot/BotServer.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/BotServer.lua",
+      "sha256": "ffc6cb4b4403cca453e80634b6b616848bba6b6a4fbd78a8b6bf39dcb73deee3",
+      "sha1": "e5b5bec370ca30c3591060b1c3648b8203327ee2"
+    },
+    {
+      "path": "vBot/BotServer.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/BotServer.otui",
+      "sha256": "5f63188774f876b4419b08cf071b45a7f4ba89a2019e0d4e88b6f724f7a572d8",
+      "sha1": "781ed7728639718a49ac5d1a392258b0810bcdae"
+    },
+    {
+      "path": "vBot/CamelPots.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/CamelPots.lua",
+      "sha256": "69dc0cad3521803149c87241ef7b8669f7c493510abc35850e46cdd2112ade52",
+      "sha1": "f7c3d5cfbc9eef274b218919e3f4912a526fc5d6"
+    },
+    {
+      "path": "vBot/Conditions.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/Conditions.lua",
+      "sha256": "3b629365252cb7e182f6e8cf3ecf56d96fad1ab4a386717947f56fa03c92177c",
+      "sha1": "17cdc04f384d58d96853f7cd4cd1ac9fc6b4d925"
+    },
+    {
+      "path": "vBot/Conditions.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/Conditions.otui",
+      "sha256": "9b4800022022aac2834365dc58b69f1bc7046e07a922b9c90551c882c860bf22",
+      "sha1": "7e3c5086d260b6a699aac11f07e898c9edee42e9"
+    },
+    {
+      "path": "vBot/Containers.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/Containers.lua",
+      "sha256": "c6f200672964272f921b203c89732786226797b3893e45ebd487f6348adcebec",
+      "sha1": "6dae0fe8e7bd103a758368f2af4995e163380c0b"
+    },
+    {
+      "path": "vBot/Dropper.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/Dropper.lua",
+      "sha256": "b0cb534fae63ed27946e9bf8e07b5a70b82fb28d43ad8f6928bcb8ddb0f712ea",
+      "sha1": "798e591f271a418077b414fe6a98fa5bd3687915"
+    },
+    {
+      "path": "vBot/Equipper.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/Equipper.lua",
+      "sha256": "8dd9cbdc2d95032639a78f51ed99798b6c818f4458d59dcebf065d0faddd475e",
+      "sha1": "6c3b8782e0192f845a19a810fd936c1f5a4d69c5"
+    },
+    {
+      "path": "vBot/FireBomb.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/FireBomb.lua",
+      "sha256": "decb0ba37ab233a3704e76515a3fa10cdd70e8aab4928f37f80213476e83a45d",
+      "sha1": "add1c4470be371cd96dff8f25ea24533251e2c7b"
+    },
+    {
+      "path": "vBot/HealBot.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/HealBot.lua",
+      "sha256": "59c0301096bcbb7204e9f93ebe866ca3ac31a5fabf355579f3d8adc1fda97e71",
+      "sha1": "4203771c94d6a57a39b353f5001c02cdd0767575"
+    },
+    {
+      "path": "vBot/HealBot.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/HealBot.otui",
+      "sha256": "3f01b37e68ebb8c326bbfe5be33f6e0c7de71e05297b2a5a8b59bde578e67d93",
+      "sha1": "1a9350303711089e3e935b67c557c74d1f1df113"
+    },
+    {
+      "path": "vBot/IconEditor.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/IconEditor.lua",
+      "sha256": "bf475f6bb12cd6e8645729da8a56753560a44ca799ae8b6bc484ac1b63882c20",
+      "sha1": "fb44831e8612099766622cf65cb2423dec33f42c"
+    },
+    {
+      "path": "vBot/IconEditor.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/IconEditor.otui",
+      "sha256": "fc5da30dbb8ad515fb01aaf699921271afc3b44a43ae87ad525a185d28c01515",
+      "sha1": "a0bf3458cf579411f24f1b30ea71c9d3a71f3415"
+    },
+    {
+      "path": "vBot/Sio.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/Sio.lua",
+      "sha256": "ec1240be1f25ed7d09569d79fa0568119929d24a5754ceb4491ff157410e741d",
+      "sha1": "cbe160595930dc9e21a0340e33186e2aa18c34ba"
+    },
+    {
+      "path": "vBot/TimerExecutor.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/TimerExecutor.lua",
+      "sha256": "2719d393cbfd8d4c0c0be8df941488a09074d9444851b1136d2cd565f2efa0ef",
+      "sha1": "35a0193fd4d8a00f4dc4610037e7c6b9c5ab0d04"
+    },
+    {
+      "path": "vBot/TimerExecutor.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/TimerExecutor.otui",
+      "sha256": "98c3cff2be7db1914a8e949c32e8d6e50567add806fecb03ddf367f741a647ef",
+      "sha1": "2baec1a96584852d96ff107c5faf109f3d8f0ed6"
+    },
+    {
+      "path": "vBot/ZoomMap.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/ZoomMap.lua",
+      "sha256": "c0246ba6a89f1a4b4db3a3baa1d838985dc43d241cd48ca4c9456e1eff7f3dea",
+      "sha1": "cb2a7d42df3f78e1373dbe97072b678e77709329"
+    },
+    {
+      "path": "vBot/alarms.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/alarms.lua",
+      "sha256": "7771d207648310952527c90accb90658c6b50e65495b5c8174121073a5a0b0f8",
+      "sha1": "b034130fb09d3bb03abc136ba3245209c4d859e5"
+    },
+    {
+      "path": "vBot/alarms.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/alarms.otui",
+      "sha256": "51e9bd61e089eaed16e41c935b9e85420de49e38ae999dccb03796108ccea9f9",
+      "sha1": "29d89011c8c12e40e1244dd074579285181303e8"
+    },
+    {
+      "path": "vBot/analyzer.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/analyzer.lua",
+      "sha256": "ee5703327ecc64891231e4e8e551ca8934d27f76d122c01b4e847e11489aa291",
+      "sha1": "cfe43e9d3f4a953a5b0dea181c1809429ae9f86f"
+    },
+    {
+      "path": "vBot/analyzer.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/analyzer.otui",
+      "sha256": "41f566f686d77176f23b3c4b6998fa9b10d9a47682f7a585570b1b64a5e6959a",
+      "sha1": "66aefb9ef37cf8607885aa2ad9fc730cc6560068"
+    },
+    {
+      "path": "vBot/cast_food.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/cast_food.lua",
+      "sha256": "e398f65af1b6f1b20c171c491bd07dbdd2066c1fb1aa40ec9c931acfebc0fcfa",
+      "sha1": "a1033dd3661f3052c327bd235b0c070f1647f3f4"
+    },
+    {
+      "path": "vBot/cave_target_settings.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/cave_target_settings.lua",
+      "sha256": "4892134944e8c67c4ecc8e696ed05305b59feb2f1f43f67e87e931a1b809e6e6",
+      "sha1": "855d430b275ea3533135ab7f068681b0cc8896d1"
+    },
+    {
+      "path": "vBot/cave_target_settings.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/cave_target_settings.otui",
+      "sha256": "b65c17f2c05a18a9af8acfbf7ba6537f9c18f1396562d6b17ef4a39c13c323b9",
+      "sha1": "92412584bc72fa8c4567eec3fbdc68a9a37b1f5a"
+    },
+    {
+      "path": "vBot/cavebot.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/cavebot.lua",
+      "sha256": "dd81dcd718e56cf1b414947ba24f05028fe812730c2884fc8f1942fd98b87193",
+      "sha1": "739ba428c952c59c12a306bf732b55d2730e37da"
+    },
+    {
+      "path": "vBot/cavebot_control_panel.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/cavebot_control_panel.lua",
+      "sha256": "364970b39a64364e3607ce12904ae5d3ffe96a59644987b6c25fa021a341d263",
+      "sha1": "fa71af8bdfed9b3429f47aae31bb0b9ad61ae3a0"
+    },
+    {
+      "path": "vBot/combo.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/combo.lua",
+      "sha256": "87c8846c78e812035bd2827ac31f62eb30148362aac1fed81a869675f46f61b4",
+      "sha1": "dce40332bb132ca92c2fb7264738ca75e170b0c9"
+    },
+    {
+      "path": "vBot/combo.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/combo.otui",
+      "sha256": "ad506b085421a032e833e0fd735099f68b7e81116be58f717c3c917c52c30d82",
+      "sha1": "1cedbe2984b2deafe11b3839392185c094820bd5"
+    },
+    {
+      "path": "vBot/configs.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/configs.lua",
+      "sha256": "564ee429398398ad203651612cee593040010b247c9da1ebbfb92016206ae290",
+      "sha1": "cfe4136cdbe8ae0ebfe4538bdd527a945aac71b4"
+    },
+    {
+      "path": "vBot/depositer_config.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/depositer_config.lua",
+      "sha256": "e3f6e1695a2be3774dc22e7f9db08eb943f13033475bf1edad465199613e7485",
+      "sha1": "80198dc27ea9f27c7b38a1a44ce4f556d0ffa068"
+    },
+    {
+      "path": "vBot/depositer_config.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/depositer_config.otui",
+      "sha256": "e9191e720cad9ced893c77e4c450df5cb9841117505d7a9fc74a1ecb2f011242",
+      "sha1": "7f54a0f476ddf7102f6d9bdce0f42a95e129a2a6"
+    },
+    {
+      "path": "vBot/equip.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/equip.lua",
+      "sha256": "15fe160b72c822c45bfd2249c3733c8c2b521bcce874290a264f09c7540251d4",
+      "sha1": "f8943210a36b8f9805017dfd04de2f5b88c389ab"
+    },
+    {
+      "path": "vBot/equipper.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/equipper.otui",
+      "sha256": "eb8d6b6b331da36af7b0ee7da2603e0d70ed065918c403ecbc908c7b8663e067",
+      "sha1": "42bb4869589b1fc71cbcc3d0b5f3baf091766f10"
+    },
+    {
+      "path": "vBot/exeta.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/exeta.lua",
+      "sha256": "359f48445c2ca1aff0b8fac1c048b54f56f595a1ec65a38bf0f39971bdc65b28",
+      "sha1": "633594959d77be2586aff5d42cb3a748c0587297"
+    },
+    {
+      "path": "vBot/extras.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/extras.lua",
+      "sha256": "3c386eb265f5cfb68fe6845cb22e7c382a7f5e34349512f44c3311653c972d3e",
+      "sha1": "a451d256e4785e94d9c734bc9cf0d148db95e098"
+    },
+    {
+      "path": "vBot/extras.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/extras.otui",
+      "sha256": "b226c57d5ed4229df81faf1c7df98328ae54981cd15e24c60ec57ee8eaafb2a8",
+      "sha1": "954bea6da205d71675d49eb6b3fd43582978e940"
+    },
+    {
+      "path": "vBot/extrasPvp.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/extrasPvp.lua",
+      "sha256": "63d0110592c00ea482f6661347f7d97cc832b01197480504bfaf573b7a1ba379",
+      "sha1": "90607ff28c146d9c8bee2b62bd1653486370bdae"
+    },
+    {
+      "path": "vBot/extrasPvp.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/extrasPvp.otui",
+      "sha256": "b7379d1e2d9b33ed8e88cd6f08bc64e78c471031652be77721c938660c119178",
+      "sha1": "339bb4326653381fa69a19297e109c097f3cadfb"
+    },
+    {
+      "path": "vBot/friend_healer.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/friend_healer.lua",
+      "sha256": "9625e37ef39b1c6ef1784f238bf31596f5be2194204bae238f0abf8723f25d36",
+      "sha1": "6cbf5d815c74fe9f1640bc47c222c2348c6252ab"
+    },
+    {
+      "path": "vBot/friend_healer.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/friend_healer.otui",
+      "sha256": "85187bb9389e6169da868b6bea7cb2b4fe7c1ba8dc97024891ed892a365ed8f7",
+      "sha1": "e6583b53f89fcf3fd002bd4df5232e54c0169760"
+    },
+    {
+      "path": "vBot/hold_target.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/hold_target.lua",
+      "sha256": "a4024f1b9eb382d327f5d7e0304bebc7cbda819bcb5549cb7000ec15199be914",
+      "sha1": "39fdbd28e987ba92a3aa7166b59f017663c17de9"
+    },
+    {
+      "path": "vBot/ingame_editor.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/ingame_editor.otui",
+      "sha256": "4f33e9ac9aa2cbbca617b2ea17a859899d6457c586fa1631f1ed499f6681e67b",
+      "sha1": "482f1489f6da7cdb10c21855d0fe542e91ff8ff8"
+    },
+    {
+      "path": "vBot/items.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/items.lua",
+      "sha256": "3ba82e69853cfd5d2638361e3cc4b812af93e915ea31cef70d96d63fd5b536ea",
+      "sha1": "391816c79bf31cac5b4bbdb35a6fbcf7fa8c8d0b"
+    },
+    {
+      "path": "vBot/main.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/main.lua",
+      "sha256": "c91feca45080a800b3de314c90322beb1ad3b2aa3668187b3f5ad035f1756d58",
+      "sha1": "c4d433048c6f455e582a2a2e9f7c85049058d54d"
+    },
+    {
+      "path": "vBot/new_cavebot_lib.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/new_cavebot_lib.lua",
+      "sha256": "30d90d3f730210ad6de9313a58284b078891d1c2c801b5868300516d673c303a",
+      "sha1": "a44b3fca60580c85067998ca52b6b2c7e56e084c"
+    },
+    {
+      "path": "vBot/npc_talk.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/npc_talk.lua",
+      "sha256": "c811add626d52e2a9cbd8ac980a9a1fd18ec11cafbc691a83b0f5e3e6eba19e8",
+      "sha1": "c59889e42509a4f6171eba31a6fba7fa540e2721"
+    },
+    {
+      "path": "vBot/playerlist.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/playerlist.lua",
+      "sha256": "b7a5786aa1ce4c513ec96ae501bb48838b3e9511de2e92a88fdcd9fcabf47585",
+      "sha1": "06ce37ad8af191bbef2cb7401b1300f15bca0363"
+    },
+    {
+      "path": "vBot/playerlist.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/playerlist.otui",
+      "sha256": "0b74a7bbf2f35f5f8f34a47e1d209eaad63d8349c20851c90df69dac95cf1b88",
+      "sha1": "3d18bb3043c516265273f4eb0de8813975f7378c"
+    },
+    {
+      "path": "vBot/pushmax.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/pushmax.lua",
+      "sha256": "994e6b39d7fccd4ccf6a74ac0772d6d4e355d3c43dc5e1981dd1fec9e210fae6",
+      "sha1": "0efb4bcdd03d7f0739a02cdbe593fa038ba1ad04"
+    },
+    {
+      "path": "vBot/pushmax.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/pushmax.otui",
+      "sha256": "77f2dbf5a7583591b21b311d765f4363be57a3d0d52f14e026a85991f8f7e976",
+      "sha1": "1367efd88a6ce46014a8cd2f5c3754d3e3bfff99"
+    },
+    {
+      "path": "vBot/pvp_support.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/pvp_support.lua",
+      "sha256": "63352893ef30bf3bcf21cdeef56787766627c83cd9bdf1eed7664f3ebd00bf25",
+      "sha1": "749cbd6aae8d9d13e2f61108b55ee1bc78e0097c"
+    },
+    {
+      "path": "vBot/quiver_label.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/quiver_label.lua",
+      "sha256": "00be1ebc4056ec5387d0946cef0ff658a3feea5b90dc425a4f798b05cebc9e8c",
+      "sha1": "03f59e1d6e7ab411e100f2d3dba9d10a9f904bfa"
+    },
+    {
+      "path": "vBot/quiver_manager.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/quiver_manager.lua",
+      "sha256": "f46cfd22cbdbfe405b9329bf45b8da2d07f8aea946e8c4381ec9b95a2bfb2b1f",
+      "sha1": "1358909f48ca97a7e31a89409a6a5e0c5cc83d75"
+    },
+    {
+      "path": "vBot/siolist.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/siolist.otui",
+      "sha256": "2960944089dda5b84f724b0eb187d021f9b68c3954be334077bc0a2b6a4c168b",
+      "sha1": "7df917914e3de22a2f0b71dcdb47ea1e486cd39c"
+    },
+    {
+      "path": "vBot/spy_level.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/spy_level.lua",
+      "sha256": "2691e551029db1d6621528ec699477e84a5a646d29502b24aa445288501b53a4",
+      "sha1": "dc9df3ac5386e5c6f7bc6c6c468719267faf74ca"
+    },
+    {
+      "path": "vBot/supplies.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/supplies.lua",
+      "sha256": "bb7071199afa60166eac55423aea8e957fc07955cc72ee141c2e0e0b5d91f3f2",
+      "sha1": "5bdf19ec5929fc032c99e4525ed39309b07777aa"
+    },
+    {
+      "path": "vBot/supplies.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/supplies.otui",
+      "sha256": "fab8ab96bc182055df2264b2ad0f70b30d3d81b42c216e8c742e3c91c0fd8a13",
+      "sha1": "57887c4dbc857047c71e4efae248ce8863bee920"
+    },
+    {
+      "path": "vBot/tools.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/tools.lua",
+      "sha256": "162072ce09f0f09975280cd6d20266e9c2e2a4723d66ee2bbd7099109906d97c",
+      "sha1": "ea7ac0ec864e11f704424b9ed9bd82de83dc586e"
+    },
+    {
+      "path": "vBot/vlib.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/vlib.lua",
+      "sha256": "8c4c8726c74856bf571e820e1584252942bd0a9563037dcf304bf2fb4dbc31b1",
+      "sha1": "bc2827454f73ae09bffd9d013923a05c2321c217"
+    },
+    {
+      "path": "vBot/xeno_menu.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/xeno_menu.lua",
+      "sha256": "0bca8ab864e92fabb92526910626c51a836f61568382bc766ae0a0f80651491d",
+      "sha1": "7c1735ee5dfa1bc02555346b302745c11a8dccca"
+    },
+    {
+      "path": "zFreeScripts/zAutoBuff.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/zFreeScripts/zAutoBuff.lua",
+      "sha256": "b95840f0e66c53979de6000061623d5104f71fee427b752095d65fdafef7d3d8",
+      "sha1": "d3f1253cb88410cfdb82272a0021be1fb5692e7b"
+    },
+    {
+      "path": "zFreeScripts/z_Auto-Party.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/zFreeScripts/z_Auto-Party.lua",
+      "sha256": "84698d9046fbf277f4a78ceca1e3a379e4981979f99a41cbc882923f80962d3b",
+      "sha1": "11bb62455b7028b4e0c853c08c962ebaf58acf94"
+    },
+    {
+      "path": "vBot/CamelHubUpdater.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/CamelHubUpdater.lua",
+      "sha256": "a86fbd6d5d936776820bc5be19979ff1dfd10bd59f56d00e03232feb2299ecf6",
+      "sha1": "493b30990aecb022552de35db86ad9110e4855fd"
+    }
+  ]
+}
