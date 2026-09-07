@@ -2,7 +2,7 @@
 from pathlib import Path
 import hashlib, json, sys, zlib
 
-VERSION = "1.0.2"
+VERSION = "1.0.3"
 ROOT = Path(__file__).resolve().parent
 RELEASE = ROOT / "release"
 CORE_LIST = ROOT / "CORE_FILES.txt"
@@ -48,8 +48,10 @@ manifest = {
     "version": VERSION,
     "updaterProtocol": "normalized-adler32-v2",
     "summary": [
-        "Core Camel Hub.",
-        "Checksums normalizados LF/CRLF.",
+        "COMMON real para los 10 personajes: F6 Cave+Target, Anti-Push seguro y Anti-PK.",
+        "Agrega vBot/CamelCommonMacros.lua al Core compartido.",
+        "Anti-Push limitado a Gold Coin 3031 y Platinum Coin 3035.",
+        "Rescue y configuraciones por personaje permanecen protegidos.",
         "Updater excluido del auto-update."
     ],
     "files": files

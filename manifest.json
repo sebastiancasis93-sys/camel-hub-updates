@@ -1,11 +1,13 @@
 {
   "product": "Camel Hub",
   "channel": "stable",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "updaterProtocol": "normalized-adler32-v2",
   "summary": [
-    "Corrige crash en vBot/extras.lua cuando la vocacion detectada queda vacia.",
-    "No modifica perfiles, storage, rutas, iconos ni configuraciones por personaje."
+    "COMMON real para los 10 personajes: F6 Cave+Target, Anti-Push seguro y Anti-PK.",
+    "Agrega vBot/CamelCommonMacros.lua al Core compartido.",
+    "Anti-Push limitado a Gold Coin 3031 y Platinum Coin 3035.",
+    "Rescue y configuraciones por personaje permanecen protegidos."
   ],
   "files": [
     {
@@ -310,6 +312,13 @@
       "sha256": "69dc0cad3521803149c87241ef7b8669f7c493510abc35850e46cdd2112ade52"
     },
     {
+      "path": "vBot/CamelCommonMacros.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/CamelCommonMacros.lua",
+      "normalizedSize": 4183,
+      "adler32": "ef362485",
+      "sha256": "30af8f5393bed02452a7fc9398bb9f62e237ef4466d50552dcb3ebde84168fe6"
+    },
+    {
       "path": "vBot/Conditions.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/Conditions.lua",
       "normalizedSize": 9524,
@@ -529,9 +538,9 @@
     {
       "path": "vBot/extras.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/extras.lua",
-      "normalizedSize": 20442,
-      "adler32": "775e4e9b",
-      "sha256": "9fb9e2bfcf4bc0eacaa1d9bdb5d517b5133635268a5d520a990db2dfd8bb0585"
+      "normalizedSize": 20315,
+      "adler32": "61522357",
+      "sha256": "fe4bb5741d494ce73eb50e8b159204dc386fa45221ba1508a846f0c58df14697"
     },
     {
       "path": "vBot/extras.otui",

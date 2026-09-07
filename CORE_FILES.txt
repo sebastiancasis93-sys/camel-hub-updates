@@ -41,6 +41,7 @@ vBot/AttackBot.otui
 vBot/BotServer.lua
 vBot/BotServer.otui
 vBot/CamelPots.lua
+vBot/CamelCommonMacros.lua
 vBot/Conditions.lua
 vBot/Conditions.otui
 vBot/Containers.lua
