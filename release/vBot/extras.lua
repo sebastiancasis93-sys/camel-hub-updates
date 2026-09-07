@@ -475,19 +475,28 @@ if true then
           guild = guild:sub(1,10) -- change to proper (last) values
           guild = guild.."..."
         end
-        local voc
-        if text:lower():find("sorcerer") then
+        -- Some servers return look descriptions that don't match one of the
+        -- vocation words above. Never leave voc as nil, otherwise concatenating
+        -- the player label crashes extras.lua.
+        local voc = ""
+        local lowerText = text:lower()
+        if lowerText:find("sorcerer") then
             voc = "MS"
-        elseif text:lower():find("druid") then
+        elseif lowerText:find("druid") then
             voc = "ED"
-        elseif text:lower():find("knight") then
+        elseif lowerText:find("knight") then
             voc = "EK"
-        elseif text:lower():find("paladin") then
+        elseif lowerText:find("paladin") then
             voc = "RP"
         end
+
         local creature = getCreatureByName(name)
         if creature then
-            creature:setText("\n"..level..voc.."\n"..guild)
+            creature:setText(
+                "\n" .. tostring(level or "") ..
+                tostring(voc or "") ..
+                "\n" .. tostring(guild or "")
+            )
         end
         if found and now - found < 500 then
           modules.game_textmessage.clearMessages()
