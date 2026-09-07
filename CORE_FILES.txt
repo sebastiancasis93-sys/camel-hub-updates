@@ -100,4 +100,3 @@ vBot/vlib.lua
 vBot/xeno_menu.lua
 zFreeScripts/zAutoBuff.lua
 zFreeScripts/z_Auto-Party.lua
-vBot/CamelHubUpdater.lua

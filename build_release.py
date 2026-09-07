@@ -23,16 +23,22 @@ allowed = [
 
 files = []
 for rel in allowed:
+    if rel == "vBot/CamelHubUpdater.lua":
+        continue
+
     p = RELEASE / rel
     if not p.is_file():
         raise SystemExit(f"Falta archivo del core: {rel}")
 
     data = p.read_bytes()
+    text = data.decode("utf-8").replace("\r\n", "\n").replace("\r", "\n")
+    norm = text.encode("utf-8")
+
     files.append({
         "path": rel,
         "url": f"{base}/release/{rel}",
-        "size": len(data),
-        "adler32": f"{zlib.adler32(data) & 0xffffffff:08x}",
+        "normalizedSize": len(norm),
+        "adler32": f"{zlib.adler32(norm) & 0xffffffff:08x}",
         "sha256": hashlib.sha256(data).hexdigest(),
     })
 
@@ -40,10 +46,11 @@ manifest = {
     "product": "Camel Hub",
     "channel": "stable",
     "version": VERSION,
-    "updaterProtocol": "adler32-v1",
+    "updaterProtocol": "normalized-adler32-v2",
     "summary": [
-        "Core comun inicial.",
-        "Checksum compatible con OTCv8 sin depender de g_crypt."
+        "Core Camel Hub.",
+        "Checksums normalizados LF/CRLF.",
+        "Updater excluido del auto-update."
     ],
     "files": files
 }
@@ -53,4 +60,3 @@ out.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
 print(f"Creado: {out}")
 print(f"Version: {VERSION}")
 print(f"Archivos: {len(files)}")
-print(f"Manifest URL: {base}/manifest.json")

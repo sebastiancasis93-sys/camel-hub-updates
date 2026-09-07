@@ -23,3 +23,5 @@ Motivo:
 - quick actions particulares
 - macros/rescate/personaje
 - configuracion especifica de cada vocacion/personaje
+
+vBot/CamelHubUpdater.lua  # bootstrap/manual; no self-update
