@@ -1,0 +1,25 @@
+CAMEL HUB - ARCHIVOS PROTEGIDOS
+
+El updater NO puede tocar:
+
+_Loader.lua
+storage/*
+vBot_configs/*
+cavebot_configs/*
+targetbot_configs/*
+vBot/AthalarIcons.lua
+vBot/AthalarMacroRegistry.lua
+vBot/CamelQuickActions.lua
+vBot/ingame_editor.lua
+
+Tambien quedan fuera backups, changelogs y archivos historicos.
+
+Motivo:
+- perfiles AttackBot / HealBot
+- rutas CaveBot
+- perfiles TargetBot
+- storage particular
+- posiciones y lista de iconos
+- quick actions particulares
+- macros/rescate/personaje
+- configuracion especifica de cada vocacion/personaje

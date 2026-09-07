@@ -1,0 +1,108 @@
+CamelScriptGroupRow < Panel
+  height: 31
+  margin-top: 2
+
+  CheckBox
+    id: enabled
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    width: 18
+    height: 18
+
+  TextEdit
+    id: name
+    anchors.left: enabled.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 4
+    width: 150
+    height: 20
+    font: verdana-11px-rounded
+
+  Label
+    id: status
+    anchors.left: name.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 7
+    width: 58
+    height: 18
+    text-align: center
+    font: verdana-11px-rounded
+    text: OFF
+
+  Button
+    id: edit
+    anchors.right: parent.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 58
+    height: 21
+    text: Edit
+
+CamelScriptGroupsWindow < MainWindow
+  !text: tr('Camel Hub - Script Groups')
+  size: 390 315
+  @onEscape: self:hide()
+
+  Label
+    id: help
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: parent.top
+    height: 38
+    text-align: center
+    font: verdana-11px-rounded
+    color: #9dd1ce
+    text: Each group has its own Lua macros.\nEnable only the groups you want loaded.
+
+  ScrollablePanel
+    id: list
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: help.bottom
+    anchors.bottom: separator.top
+    margin-top: 5
+    margin-bottom: 8
+    vertical-scrollbar: listScrollBar
+    layout: verticalBox
+
+  VerticalScrollBar
+    id: listScrollBar
+    anchors.top: list.top
+    anchors.bottom: list.bottom
+    anchors.right: list.right
+    step: 20
+    pixels-scroll: true
+
+  HorizontalSeparator
+    id: separator
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: closeButton.top
+    margin-bottom: 8
+
+  Button
+    id: reloadButton
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    width: 95
+    height: 21
+    text: Reload Scripts
+
+  Label
+    id: note
+    anchors.left: reloadButton.right
+    anchors.right: closeButton.left
+    anchors.verticalCenter: reloadButton.verticalCenter
+    margin-left: 8
+    margin-right: 8
+    text-align: center
+    font: verdana-11px-rounded
+    color: #aaaaaa
+    text: Changes apply on reload
+
+  Button
+    id: closeButton
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    width: 55
+    height: 21
+    text: Close
