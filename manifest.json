@@ -1,12 +1,13 @@
 {
   "product": "Camel Hub",
   "channel": "stable",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "updaterProtocol": "normalized-adler32-v2",
   "summary": [
-    "Fast Walk EXP2 validado: movimiento CaveBot y TargetBot mas fluido.",
-    "GOTO intenta caminar antes de ejecutar diagnosticos findPath pesados.",
-    "No modifica perfiles, storage, iconos ni sistema Rescue/Summoner."
+    "ComboBot Fast Follow comun para todos los personajes.",
+    "El follow actualiza la posicion del leader cada 50 ms y permite queue/prewalk.",
+    "Elimina la espera obligatoria a que player:isWalking() sea false.",
+    "No modifica perfiles, storage, Rescue, boosts, curaciones ni ataques del ComboBot."
   ],
   "files": [
     {
@@ -481,9 +482,9 @@
     {
       "path": "vBot/combo.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/combo.lua",
-      "normalizedSize": 14689,
-      "adler32": "3e5f06a1",
-      "sha256": "87c8846c78e812035bd2827ac31f62eb30148362aac1fed81a869675f46f61b4"
+      "normalizedSize": 17123,
+      "adler32": "c60c1a75",
+      "sha256": "4eadba1e753f4a857dc65e2565088e8c3c71cf56fba0d7cc1b1a307ab4746e6c"
     },
     {
       "path": "vBot/combo.otui",
