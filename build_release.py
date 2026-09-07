@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from pathlib import Path
-import hashlib, json, sys
+import hashlib, json, sys, zlib
 
 VERSION = "1.0.1"
 ROOT = Path(__file__).resolve().parent
@@ -8,11 +8,7 @@ RELEASE = ROOT / "release"
 CORE_LIST = ROOT / "CORE_FILES.txt"
 
 if len(sys.argv) != 2:
-    print("Uso:")
-    print("  python build_release.py https://TU-HOST")
-    print("")
-    print("Ejemplo GitHub raw:")
-    print("  python build_release.py https://raw.githubusercontent.com/USUARIO/REPO/main")
+    print("Uso: python build_release.py https://TU-HOST")
     raise SystemExit(2)
 
 base = sys.argv[1].rstrip("/")
@@ -35,24 +31,25 @@ for rel in allowed:
     files.append({
         "path": rel,
         "url": f"{base}/release/{rel}",
+        "size": len(data),
+        "adler32": f"{zlib.adler32(data) & 0xffffffff:08x}",
         "sha256": hashlib.sha256(data).hexdigest(),
-        "sha1": hashlib.sha1(data).hexdigest(),
     })
 
 manifest = {
     "product": "Camel Hub",
     "channel": "stable",
     "version": VERSION,
+    "updaterProtocol": "adler32-v1",
     "summary": [
-        "Core comun inicial generado desde los cinco bots actuales.",
-        "Solo actualiza codigo comun validado como identico entre personajes."
+        "Core comun inicial.",
+        "Checksum compatible con OTCv8 sin depender de g_crypt."
     ],
     "files": files
 }
 
 out = ROOT / "manifest.json"
 out.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
-
 print(f"Creado: {out}")
 print(f"Version: {VERSION}")
 print(f"Archivos: {len(files)}")
