@@ -6,7 +6,7 @@
 setDefaultTab("Main")
 
 CamelHubUpdater = CamelHubUpdater or {}
-CamelHubUpdater.clientVersion = "1.0.1"
+CamelHubUpdater.clientVersion = "1.0.2"
 
 local panelKey = "camelHubUpdater"
 storage[panelKey] = storage[panelKey] or {}
@@ -118,7 +118,6 @@ local COMMON_PATHS = {
   ["vBot/xeno_menu.lua"] = true,
   ["zFreeScripts/zAutoBuff.lua"] = true,
   ["zFreeScripts/z_Auto-Party.lua"] = true,
-  ["vBot/CamelHubUpdater.lua"] = true,
 }
 
 local function normalizePath(path)
@@ -149,8 +148,18 @@ local function trim(s)
   return tostring(s or ""):gsub("^%s+", ""):gsub("%s+$", "")
 end
 
+local function normalizePayload(data)
+  data = tostring(data or "")
+  data = data:gsub("
+", "
+")
+  data = data:gsub("", "
+")
+  return data
+end
+
 local function adler32(data)
-  data = data or ""
+  data = normalizePayload(data)
   local MOD = 65521
   local a = 1
   local b = 0
@@ -164,14 +173,14 @@ local function adler32(data)
 end
 
 local function verifyData(data, entry)
-  data = data or ""
+  local normalized = normalizePayload(data)
 
-  if entry.size and tonumber(entry.size) ~= #data then
-    return false, "Tamano invalido: " .. tostring(entry.path)
+  if entry.normalizedSize and tonumber(entry.normalizedSize) ~= #normalized then
+    return false, "Tamano normalizado invalido: " .. tostring(entry.path)
   end
 
   if entry.adler32 and tostring(entry.adler32) ~= "" then
-    local actual = adler32(data)
+    local actual = adler32(normalized)
     local expected = tostring(entry.adler32):lower()
     if actual ~= expected then
       return false, "Checksum invalido: " .. tostring(entry.path)
@@ -324,6 +333,10 @@ local function validateManifest(manifest)
     local rel = normalizePath(entry.path)
 
     -- Strong rule: a manifest containing ANY non-common path is rejected.
+    if rel == "vBot/CamelHubUpdater.lua" then
+      return false, "El updater se instala manualmente, no por auto-update."
+    end
+
     if not isAllowedPath(rel) then
       return false, "Ruta protegida/no permitida en manifest: " .. rel
     end
@@ -336,8 +349,8 @@ local function validateManifest(manifest)
       return false, "Falta checksum: " .. rel
     end
 
-    if entry.size == nil then
-      return false, "Falta size: " .. rel
+    if entry.normalizedSize == nil then
+      return false, "Falta normalizedSize: " .. rel
     end
   end
 
