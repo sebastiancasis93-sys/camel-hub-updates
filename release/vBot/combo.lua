@@ -357,44 +357,137 @@ macro(10, function()
 end)
 
 
+-- ================================================================
+-- Camel Hub Fast Follow
+-- Common ComboBot follow engine for every character.
+--
+-- Stock ComboBot waited until player:isWalking() became false before
+-- calculating the leader's newest position. That creates a visible
+-- stop/recalculate/step rhythm, especially on fast characters.
+--
+-- This version refreshes the leader position continuously and lets
+-- OTCv8's walk() layer queue/prewalk the next direction while the
+-- current step is still finishing.
+-- ================================================================
+
 local toFollow
 local toFollowPos = {}
+local lastFollowDir = nil
+local lastFollowWalk = 0
 
-macro(100, function()
-  toFollow = nil
-  if not config.enabled or not config.followLeaderEnabled then return end
+local FOLLOW_INTERVAL = 50
+local FOLLOW_REISSUE_MS = 80
+local FOLLOW_MAX_DISTANCE = 20
+
+local function resolveFollowName()
   if leaderTarget and config.follow == "LEADER TARGET" and leaderTarget:isPlayer() then
-    toFollow = leaderTarget:getName()
+    return leaderTarget:getName()
   elseif config.follow == "SERVER LEADER TARGET" and config.serverLeader:len() ~= 0 then
-    toFollow = serverTarget
+    if type(serverTarget) == "string" then
+      return serverTarget
+    elseif serverTarget and serverTarget.getName then
+      return serverTarget:getName()
+    end
   elseif config.follow == "SERVER LEADER" and config.serverLeader:len() ~= 0 then
-    toFollow = config.serverLeader
+    return config.serverLeader
   elseif config.follow == "LEADER" then
     if config.onSayEnabled and config.sayLeader:len() ~= 0 then
-      toFollow = config.sayLeader
+      return config.sayLeader
     elseif config.onCastEnabled and config.castLeader:len() ~= 0 then
-      toFollow = config.castLeader
+      return config.castLeader
     elseif config.onShootEnabled and config.shootLeader:len() ~= 0 then
-      toFollow = config.shootLeader
+      return config.shootLeader
     end
   end
-  if not toFollow then return end
-  local target = getCreatureByName(toFollow)
+  return nil
+end
+
+local function refreshFollowPosition(name)
+  if not name or name == "" then return end
+  local target = getCreatureByName(name)
   if target then
     local tpos = target:getPosition()
-    toFollowPos[tpos.z] = tpos
+    if tpos then
+      toFollowPos[tpos.z] = tpos
+    end
   end
-  if player:isWalking() then return end
+end
+
+macro(FOLLOW_INTERVAL, function()
+  if not config.enabled or not config.followLeaderEnabled then
+    toFollow = nil
+    lastFollowDir = nil
+    return
+  end
+
+  toFollow = resolveFollowName()
+  if not toFollow then
+    lastFollowDir = nil
+    return
+  end
+
+  -- Always refresh visible leader position, even while already walking.
+  refreshFollowPosition(toFollow)
+
   local p = toFollowPos[posz()]
   if not p then return end
-  if CaveBot.walkTo(p, 20, {ignoreNonPathable=true, precision=1, ignoreStairs=false}) then
-    delay(100)
+
+  local myPos = player:getPosition()
+  if not myPos or myPos.z ~= p.z then return end
+
+  local dist = math.max(
+    math.abs(myPos.x - p.x),
+    math.abs(myPos.y - p.y)
+  )
+
+  -- Standard ComboBot behavior: stay within one sqm of the leader.
+  if dist <= 1 then
+    lastFollowDir = nil
+    return
   end
+
+  local path = getPath(myPos, p, FOLLOW_MAX_DISTANCE, {
+    ignoreNonPathable = true,
+    precision = 1,
+    ignoreStairs = false
+  })
+
+  if not path or not path[1] then
+    return
+  end
+
+  local dir = path[1]
+
+  -- Avoid pointless repeated calls for the exact same direction inside
+  -- a tiny window, while still reacting immediately when the leader turns.
+  if dir == lastFollowDir and now - lastFollowWalk < FOLLOW_REISSUE_MS then
+    return
+  end
+
+  local ok = pcall(function()
+    walk(dir, 0)
+  end)
+
+  if not ok then
+    -- Compatibility fallback for clients where the global walk helper differs.
+    pcall(function()
+      g_game.walk(dir, true)
+    end)
+  end
+
+  lastFollowDir = dir
+  lastFollowWalk = now
 end)
 
 onCreaturePositionChange(function(creature, oldPos, newPos)
-  if creature:getName() == toFollow and newPos then
+  if not creature or not newPos or not toFollow then return end
+  if creature:getName():lower() == tostring(toFollow):lower() then
+    -- Save every floor position. When the leader goes through stairs/holes,
+    -- the follower can still reach the last known position on its current floor.
     toFollowPos[newPos.z] = newPos
+    if oldPos and oldPos.z ~= newPos.z then
+      toFollowPos[oldPos.z] = oldPos
+    end
   end
 end)
 
