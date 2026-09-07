@@ -27,8 +27,8 @@ Panel
   margin-top: 2
   margin-left: 3
   margin-right: 3
-  background-color: #10131bcc
-  border: 1 #21f6ff
+  background-color: #fff8f8ee
+  border: 1 #d91023
   padding: 3
   layout: verticalBox
 
@@ -36,28 +36,28 @@ Panel
     height: 11
     text-align: center
     font: verdana-11px-rounded
-    color: #21f6ff
+    color: #d91023
     !text: tr('.-<==-<>-==-<>-==>-.')
 
   Label
     height: 20
     text-align: center
     font: verdana-11px-rounded
-    color: #00ffff
+    color: #d91023
     !text: tr('CAMEL HUB')
 
   Label
     height: 18
     text-align: center
     font: verdana-11px-rounded
-    color: #d85cff
+    color: #d91023
     !text: tr('Peru')
 
   Label
     height: 11
     text-align: center
     font: verdana-11px-rounded
-    color: #d85cff
+    color: #d91023
     !text: tr('`-<==-<>-==-<>-==>-`')
 ]])
 
