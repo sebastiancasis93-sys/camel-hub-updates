@@ -475,9 +475,7 @@ if true then
           guild = guild:sub(1,10) -- change to proper (last) values
           guild = guild.."..."
         end
-        -- Some servers return look descriptions that don't match one of the
-        -- vocation words above. Never leave voc as nil, otherwise concatenating
-        -- the player label crashes extras.lua.
+        -- Camel Hub 1.0.2: vocation may be absent in custom server look text.
         local voc = ""
         local lowerText = text:lower()
         if lowerText:find("sorcerer") then

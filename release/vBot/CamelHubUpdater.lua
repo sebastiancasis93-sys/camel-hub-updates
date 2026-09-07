@@ -5,7 +5,7 @@
 setDefaultTab("Main")
 
 CamelHubUpdater = CamelHubUpdater or {}
-CamelHubUpdater.clientVersion = "1.0.3-safe"
+CamelHubUpdater.clientVersion = "1.0.4-safe"
 
 local panelKey = "camelHubUpdater"
 storage[panelKey] = storage[panelKey] or {}
@@ -58,6 +58,7 @@ local COMMON_PATHS = {
   ["vBot/BotServer.lua"] = true,
   ["vBot/BotServer.otui"] = true,
   ["vBot/CamelPots.lua"] = true,
+  ["vBot/CamelCommonMacros.lua"] = true,
   ["vBot/Conditions.lua"] = true,
   ["vBot/Conditions.otui"] = true,
   ["vBot/Containers.lua"] = true,
