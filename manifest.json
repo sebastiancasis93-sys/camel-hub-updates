@@ -1,12 +1,11 @@
 {
   "product": "Camel Hub",
   "channel": "stable",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "updaterProtocol": "normalized-adler32-v2",
   "summary": [
-    "Banner CAMEL HUB con colores del Peru.",
-    "Verificacion normalizada para evitar diferencias CRLF/LF.",
-    "CamelHubUpdater.lua queda fuera del auto-update para evitar auto-reemplazo."
+    "Corrige crash en vBot/extras.lua cuando la vocacion detectada queda vacia.",
+    "No modifica perfiles, storage, rutas, iconos ni configuraciones por personaje."
   ],
   "files": [
     {
@@ -530,9 +529,9 @@
     {
       "path": "vBot/extras.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/extras.lua",
-      "normalizedSize": 20085,
-      "adler32": "13dfe88b",
-      "sha256": "3c386eb265f5cfb68fe6845cb22e7c382a7f5e34349512f44c3311653c972d3e"
+      "normalizedSize": 20442,
+      "adler32": "775e4e9b",
+      "sha256": "9fb9e2bfcf4bc0eacaa1d9bdb5d517b5133635268a5d520a990db2dfd8bb0585"
     },
     {
       "path": "vBot/extras.otui",
