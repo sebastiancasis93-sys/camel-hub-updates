@@ -1,18 +1,17 @@
--- Camel Hub Updater v1.0.0
--- Generated from the CURRENT Athalar/Lemac/Tronchito/Gampi/Valyria builds.
--- Updates ONLY common whitelisted code.
--- Character profiles, storage, routes, icons and character macros are protected.
+-- Camel Hub Updater SAFE bootstrap v1.0.3
+-- Loaded LAST under pcall so updater errors can never stop the bot core.
+-- Character storage/profiles/routes/icons remain outside the common whitelist.
 
 setDefaultTab("Main")
 
 CamelHubUpdater = CamelHubUpdater or {}
-CamelHubUpdater.clientVersion = "1.0.2"
+CamelHubUpdater.clientVersion = "1.0.3-safe"
 
 local panelKey = "camelHubUpdater"
 storage[panelKey] = storage[panelKey] or {}
 local cfg = storage[panelKey]
-cfg.version = cfg.version or "1.0.0"
-cfg.manifestUrl = (cfg.manifestUrl and cfg.manifestUrl ~= "") and cfg.manifestUrl or "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/manifest.json"
+cfg.version = cfg.version or "1.0.1"
+cfg.manifestUrl = "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/manifest.json"
 if cfg.autoReload == nil then cfg.autoReload = true end
 
 local COMMON_PATHS = {
@@ -129,6 +128,7 @@ end
 local function isAllowedPath(path)
   path = normalizePath(path)
   if path == "" or path:find("..", 1, true) then return false end
+  if path == "vBot/CamelHubUpdater.lua" then return false end
   return COMMON_PATHS[path] == true
 end
 
@@ -144,17 +144,12 @@ local function targetPath(rel)
   return "/bot/" .. getConfigName() .. "/" .. normalizePath(rel)
 end
 
-local function trim(s)
-  return tostring(s or ""):gsub("^%s+", ""):gsub("%s+$", "")
-end
-
 local function normalizePayload(data)
   data = tostring(data or "")
-  data = data:gsub("
-", "
-")
-  data = data:gsub("", "
-")
+  local cr = string.char(13)
+  local lf = string.char(10)
+  data = data:gsub(cr .. lf, lf)
+  data = data:gsub(cr, lf)
   return data
 end
 
@@ -163,40 +158,34 @@ local function adler32(data)
   local MOD = 65521
   local a = 1
   local b = 0
-
   for i = 1, #data do
     a = (a + string.byte(data, i)) % MOD
     b = (b + a) % MOD
   end
-
   return string.format("%08x", b * 65536 + a)
 end
 
 local function verifyData(data, entry)
+  if type(entry) ~= "table" then return false, "Entrada invalida" end
   local normalized = normalizePayload(data)
-
   if entry.normalizedSize and tonumber(entry.normalizedSize) ~= #normalized then
     return false, "Tamano normalizado invalido: " .. tostring(entry.path)
   end
-
-  if entry.adler32 and tostring(entry.adler32) ~= "" then
-    local actual = adler32(normalized)
-    local expected = tostring(entry.adler32):lower()
-    if actual ~= expected then
-      return false, "Checksum invalido: " .. tostring(entry.path)
-    end
-    return true
+  if not entry.adler32 or tostring(entry.adler32) == "" then
+    return false, "Manifest sin checksum: " .. tostring(entry.path)
   end
-
-  return false, "Manifest sin checksum compatible: " .. tostring(entry.path)
+  local actual = adler32(normalized)
+  local expected = tostring(entry.adler32):lower()
+  if actual ~= expected then
+    return false, "Checksum invalido: " .. tostring(entry.path)
+  end
+  return true
 end
 
 local function readLocal(rel)
   local full = targetPath(rel)
   if not g_resources.fileExists(full) then return nil end
-  local ok, data = pcall(function()
-    return g_resources.readFileContents(full)
-  end)
+  local ok, data = pcall(function() return g_resources.readFileContents(full) end)
   if ok then return data end
   return nil
 end
@@ -206,8 +195,7 @@ local function localMatches(entry)
   if not isAllowedPath(rel) then return true end
   local data = readLocal(rel)
   if not data then return false end
-  local ok = verifyData(data, entry)
-  return ok == true
+  return verifyData(data, entry) == true
 end
 
 local function safeVersion(v)
@@ -223,33 +211,28 @@ end
 local function backupFile(rel)
   local data = readLocal(rel)
   if not data then return end
-
   local root = "/bot/" .. getConfigName() .. "/_camelhub_backups"
   local folder = root .. "/from_" .. safeVersion(cfg.version)
-
   ensureDir(root)
   ensureDir(folder)
-
   local flat = normalizePath(rel):gsub("/", "__")
-  pcall(function()
-    g_resources.writeFileContents(folder .. "/" .. flat, data)
-  end)
+  pcall(function() g_resources.writeFileContents(folder .. "/" .. flat, data) end)
 end
 
 local ui = setupUI([[
 Panel
-  height: 100
+  height: 78
   margin-top: 2
 
   Label
     id: title
     anchors.top: parent.top
     anchors.left: parent.left
-    width: 108
+    width: 112
     height: 18
     text-align: center
     font: verdana-11px-rounded
-    background: #006060
+    background: #b5121b
     color: #ffffff
     text: CAMEL UPDATER
 
@@ -272,41 +255,30 @@ Panel
     text: Update
 
   Label
-    id: urlLabel
+    id: connection
     anchors.top: title.bottom
     anchors.left: parent.left
-    margin-top: 4
-    width: 42
-    height: 18
-    text: URL:
-
-  TextEdit
-    id: url
-    anchors.top: urlLabel.top
-    anchors.left: urlLabel.right
     anchors.right: parent.right
-    height: 18
-    text: ""
+    margin-top: 3
+    height: 17
+    text-align: center
+    color: #d7d7d7
+    text: GitHub conectado
 
   Label
     id: status
-    anchors.top: url.bottom
+    anchors.top: connection.bottom
     anchors.left: parent.left
     anchors.right: parent.right
-    margin-top: 4
-    height: 50
+    margin-top: 2
+    height: 35
     text-align: center
     text-wrap: true
     font: verdana-11px-rounded
     background: #292A2A
     color: #cfd3d7
-    text: Camel Hub 1.0.0
+    text: Camel Hub 1.0.1
 ]])
-
-ui.url:setText(cfg.manifestUrl or "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/manifest.json")
-ui.url.onTextChange = function(widget, text)
-  cfg.manifestUrl = trim(text)
-end
 
 local lastManifest = nil
 local installing = false
@@ -320,40 +292,9 @@ local function validateManifest(manifest)
   if type(manifest) ~= "table" or type(manifest.files) ~= "table" then
     return false, "Manifest invalido"
   end
-
   if tostring(manifest.product or "") ~= "Camel Hub" then
-    return false, "Manifest no pertenece a Camel Hub"
+    return false, "Manifest incorrecto"
   end
-
-  if tostring(manifest.channel or "stable") ~= "stable" then
-    return false, "Canal no permitido"
-  end
-
-  for _, entry in ipairs(manifest.files) do
-    local rel = normalizePath(entry.path)
-
-    -- Strong rule: a manifest containing ANY non-common path is rejected.
-    if rel == "vBot/CamelHubUpdater.lua" then
-      return false, "El updater se instala manualmente, no por auto-update."
-    end
-
-    if not isAllowedPath(rel) then
-      return false, "Ruta protegida/no permitida en manifest: " .. rel
-    end
-
-    if type(entry.url) ~= "string" or not entry.url:match("^https://") then
-      return false, "URL invalida: " .. rel
-    end
-
-    if not entry.adler32 or tostring(entry.adler32) == "" then
-      return false, "Falta checksum: " .. rel
-    end
-
-    if entry.normalizedSize == nil then
-      return false, "Falta normalizedSize: " .. rel
-    end
-  end
-
   return true
 end
 
@@ -369,40 +310,25 @@ local function pendingFiles(manifest)
 end
 
 local function fetchManifest(callback)
-  local url = trim(cfg.manifestUrl)
-
-  if url == "" or not url:match("^https://") then
-    setStatus("Pega la URL HTTPS del manifest de Camel Hub.", "#ffd166")
-    if callback then callback(nil) end
-    return
-  end
-
   setStatus("Revisando actualizaciones...", "#ffd166")
-
-  HTTP.get(url, function(data, err)
+  HTTP.get(cfg.manifestUrl, function(data, err)
     if err or not data then
-      setStatus("No se pudo leer manifest.\n" .. tostring(err or "sin datos"), "#ff8a8a")
+      setStatus("No se pudo leer manifest.", "#ff8a8a")
       if callback then callback(nil) end
       return
     end
-
-    local ok, manifest = pcall(function()
-      return json.decode(data)
-    end)
-
+    local ok, manifest = pcall(function() return json.decode(data) end)
     if not ok then
       setStatus("Manifest JSON invalido.", "#ff8a8a")
       if callback then callback(nil) end
       return
     end
-
     local valid, why = validateManifest(manifest)
     if not valid then
       setStatus(why, "#ff8a8a")
       if callback then callback(nil) end
       return
     end
-
     lastManifest = manifest
     if callback then callback(manifest) end
   end)
@@ -410,20 +336,13 @@ end
 
 local function showManifest(manifest)
   if not manifest then return end
-
   local pending = pendingFiles(manifest)
   local remote = tostring(manifest.version or "?")
-
   if #pending == 0 then
     cfg.version = remote
     setStatus("Camel Hub " .. remote .. "\nTodo actualizado.", "#8cff9a")
   else
-    setStatus(
-      "Instalada: " .. tostring(cfg.version) ..
-      " | Disponible: " .. remote ..
-      "\nArchivos comunes pendientes: " .. #pending,
-      "#ffd166"
-    )
+    setStatus("Instalada: " .. tostring(cfg.version) .. " | Disponible: " .. remote .. "\nPendientes: " .. #pending, "#ffd166")
   end
 end
 
@@ -431,111 +350,54 @@ local function installNext(manifest, list, index, installed)
   if index > #list then
     installing = false
     cfg.version = tostring(manifest.version or cfg.version)
-
-    setStatus(
-      "Actualizado a Camel Hub " .. cfg.version ..
-      "\n" .. installed .. " archivo(s). Recargando...",
-      "#8cff9a"
-    )
-
+    setStatus("Actualizado a " .. cfg.version .. "\n" .. installed .. " archivo(s).", "#8cff9a")
     if cfg.autoReload and type(reload) == "function" then
-      schedule(800, function()
-        pcall(reload)
-      end)
+      schedule(800, function() pcall(reload) end)
     end
     return
   end
-
   local entry = list[index]
   local rel = normalizePath(entry.path)
-
-  setStatus(
-    "Actualizando " .. index .. "/" .. #list .. "\n" .. rel,
-    "#ffd166"
-  )
-
+  setStatus("Actualizando " .. index .. "/" .. #list .. "\n" .. rel, "#ffd166")
   HTTP.get(entry.url, function(data, err)
     if err or not data then
       installing = false
-      setStatus(
-        "Descarga fallida: " .. rel .. "\n" .. tostring(err or "sin datos"),
-        "#ff8a8a"
-      )
+      setStatus("Descarga fallida: " .. rel, "#ff8a8a")
       return
     end
-
     local verified, why = verifyData(data, entry)
     if not verified then
       installing = false
       setStatus(why, "#ff8a8a")
       return
     end
-
     backupFile(rel)
-
-    local ok, writeErr = pcall(function()
-      g_resources.writeFileContents(targetPath(rel), data)
-    end)
-
+    local ok = pcall(function() g_resources.writeFileContents(targetPath(rel), data) end)
     if not ok then
       installing = false
-      setStatus(
-        "No se pudo escribir: " .. rel .. "\n" .. tostring(writeErr),
-        "#ff8a8a"
-      )
+      setStatus("No se pudo escribir: " .. rel, "#ff8a8a")
       return
     end
-
-    local written = readLocal(rel)
-    local verifiedAfter, whyAfter = verifyData(written or "", entry)
-
-    if not verifiedAfter then
-      installing = false
-      setStatus(
-        "Verificacion posterior fallo: " .. rel .. "\n" .. tostring(whyAfter),
-        "#ff8a8a"
-      )
-      return
-    end
-
-    schedule(40, function()
-      installNext(manifest, list, index + 1, installed + 1)
-    end)
+    schedule(40, function() installNext(manifest, list, index + 1, installed + 1) end)
   end)
 end
 
 local function installManifest(manifest)
   if installing or not manifest then return end
-
   local list = pendingFiles(manifest)
-
-  if #list == 0 then
-    showManifest(manifest)
-    return
-  end
-
+  if #list == 0 then showManifest(manifest) return end
   installing = true
   installNext(manifest, list, 1, 0)
 end
 
-ui.check.onClick = function()
-  fetchManifest(showManifest)
-end
-
+ui.check.onClick = function() fetchManifest(showManifest) end
 ui.update.onClick = function()
   if installing then return end
-
   if lastManifest then
     installManifest(lastManifest)
   else
-    fetchManifest(function(manifest)
-      if manifest then installManifest(manifest) end
-    end)
+    fetchManifest(function(manifest) if manifest then installManifest(manifest) end end)
   end
 end
 
-setStatus(
-  "Camel Hub " .. tostring(cfg.version) .. " | Updater " .. tostring(CamelHubUpdater.clientVersion) ..
-  "\nPerfiles, storage, rutas e iconos protegidos.",
-  "#9dd1ce"
-)
+setStatus("Camel Hub " .. tostring(cfg.version) .. " | Updater " .. CamelHubUpdater.clientVersion, "#9dd1ce")
