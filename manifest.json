@@ -1,21 +1,20 @@
 {
   "product": "Camel Hub",
   "channel": "stable",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "updaterProtocol": "normalized-adler32-v2",
   "summary": [
-    "COMMON real para los 10 personajes: F6 Cave+Target, Anti-Push seguro y Anti-PK.",
-    "Agrega vBot/CamelCommonMacros.lua al Core compartido.",
-    "Anti-Push limitado a Gold Coin 3031 y Platinum Coin 3035.",
-    "Rescue y configuraciones por personaje permanecen protegidos."
+    "Fast Walk EXP2 validado: movimiento CaveBot y TargetBot mas fluido.",
+    "GOTO intenta caminar antes de ejecutar diagnosticos findPath pesados.",
+    "No modifica perfiles, storage, iconos ni sistema Rescue/Summoner."
   ],
   "files": [
     {
       "path": "cavebot/actions.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/actions.lua",
-      "normalizedSize": 15164,
-      "adler32": "2f5e99ff",
-      "sha256": "dbfb0c73d50d222855d97da86824acdd16d889b6133906ddff25212090c78ab3"
+      "normalizedSize": 15194,
+      "adler32": "7675a078",
+      "sha256": "1e45214a12709e54627d5fec4fe86d6b08aa076780a997cf9c43be33482309fe"
     },
     {
       "path": "cavebot/bank.lua",
@@ -195,9 +194,9 @@
     {
       "path": "cavebot/walking.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/walking.lua",
-      "normalizedSize": 2642,
-      "adler32": "fecf5a8e",
-      "sha256": "1763591e08544ee5394a3d91a8f3396cea5b51c909a363f1c35eb0d63fbb95da"
+      "normalizedSize": 3915,
+      "adler32": "14cdd93b",
+      "sha256": "3d3c203d87c8d02ecd10e9c41e0634f47886942ec2fe5bb36506c22ae8ec48e4"
     },
     {
       "path": "cavebot/withdraw.lua",
@@ -272,9 +271,9 @@
     {
       "path": "targetbot/walking.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/targetbot/walking.lua",
-      "normalizedSize": 754,
-      "adler32": "e1a6fd0e",
-      "sha256": "8a59a0ce748162e562caad93f6aac29e3b25087bef3aed0af7241137e2d65a6d"
+      "normalizedSize": 1168,
+      "adler32": "f8e57d7e",
+      "sha256": "b3900286669fe1e7b9f0d39f4861bf8835fa7c2eeb473213ac1be3cb56220918"
     },
     {
       "path": "vBot/AttackBot.lua",
