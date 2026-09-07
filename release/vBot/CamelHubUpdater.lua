@@ -6,13 +6,13 @@
 setDefaultTab("Main")
 
 CamelHubUpdater = CamelHubUpdater or {}
-CamelHubUpdater.clientVersion = "1.0.0"
+CamelHubUpdater.clientVersion = "1.0.1"
 
 local panelKey = "camelHubUpdater"
 storage[panelKey] = storage[panelKey] or {}
 local cfg = storage[panelKey]
 cfg.version = cfg.version or "1.0.0"
-cfg.manifestUrl = cfg.manifestUrl or ""
+cfg.manifestUrl = (cfg.manifestUrl and cfg.manifestUrl ~= "") and cfg.manifestUrl or "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/manifest.json"
 if cfg.autoReload == nil then cfg.autoReload = true end
 
 local COMMON_PATHS = {
@@ -149,54 +149,37 @@ local function trim(s)
   return tostring(s or ""):gsub("^%s+", ""):gsub("%s+$", "")
 end
 
-local function lower(s)
-  return tostring(s or ""):lower()
-end
-
-local function hashData(data, entry)
+local function adler32(data)
   data = data or ""
+  local MOD = 65521
+  local a = 1
+  local b = 0
 
-  if entry and entry.sha256 and entry.sha256 ~= "" then
-    if g_crypt and type(g_crypt.sha256Encode) == "function" then
-      local ok, result = pcall(g_crypt.sha256Encode, data, false)
-      if not ok then ok, result = pcall(g_crypt.sha256Encode, data) end
-      if ok and result then return "sha256", lower(result) end
-    end
+  for i = 1, #data do
+    a = (a + string.byte(data, i)) % MOD
+    b = (b + a) % MOD
   end
 
-  if entry and entry.sha1 and entry.sha1 ~= "" then
-    if g_crypt and type(g_crypt.sha1Encode) == "function" then
-      local ok, result = pcall(g_crypt.sha1Encode, data, false)
-      if not ok then ok, result = pcall(g_crypt.sha1Encode, data) end
-      if ok and result then return "sha1", lower(result) end
-    end
-  end
-
-  return nil, nil
-end
-
-local function expectedHash(entry, algo)
-  if algo == "sha256" then return lower(entry.sha256) end
-  if algo == "sha1" then return lower(entry.sha1) end
-  return ""
+  return string.format("%08x", b * 65536 + a)
 end
 
 local function verifyData(data, entry)
-  local algo, actual = hashData(data, entry)
-  if not algo then
-    return false, "Este OTC no expone SHA-256/SHA-1. Update cancelado."
+  data = data or ""
+
+  if entry.size and tonumber(entry.size) ~= #data then
+    return false, "Tamano invalido: " .. tostring(entry.path)
   end
 
-  local expected = expectedHash(entry, algo)
-  if expected == "" then
-    return false, "Manifest sin hash: " .. tostring(entry.path)
+  if entry.adler32 and tostring(entry.adler32) ~= "" then
+    local actual = adler32(data)
+    local expected = tostring(entry.adler32):lower()
+    if actual ~= expected then
+      return false, "Checksum invalido: " .. tostring(entry.path)
+    end
+    return true
   end
 
-  if actual ~= expected then
-    return false, "Hash invalido: " .. tostring(entry.path)
-  end
-
-  return true
+  return false, "Manifest sin checksum compatible: " .. tostring(entry.path)
 end
 
 local function readLocal(rel)
@@ -311,7 +294,7 @@ Panel
     text: Camel Hub 1.0.0
 ]])
 
-ui.url:setText(cfg.manifestUrl or "")
+ui.url:setText(cfg.manifestUrl or "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/manifest.json")
 ui.url.onTextChange = function(widget, text)
   cfg.manifestUrl = trim(text)
 end
@@ -349,9 +332,12 @@ local function validateManifest(manifest)
       return false, "URL invalida: " .. rel
     end
 
-    if (not entry.sha256 or entry.sha256 == "") and
-       (not entry.sha1 or entry.sha1 == "") then
-      return false, "Falta hash: " .. rel
+    if not entry.adler32 or tostring(entry.adler32) == "" then
+      return false, "Falta checksum: " .. rel
+    end
+
+    if entry.size == nil then
+      return false, "Falta size: " .. rel
     end
   end
 
@@ -536,7 +522,7 @@ ui.update.onClick = function()
 end
 
 setStatus(
-  "Camel Hub " .. tostring(cfg.version) ..
+  "Camel Hub " .. tostring(cfg.version) .. " | Updater " .. tostring(CamelHubUpdater.clientVersion) ..
   "\nPerfiles, storage, rutas e iconos protegidos.",
   "#9dd1ce"
 )
