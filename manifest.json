@@ -1,11 +1,11 @@
 {
   "product": "Camel Hub",
   "channel": "stable",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "updaterProtocol": "adler32-v1",
   "summary": [
-    "Core comun inicial.",
-    "Checksum compatible con OTCv8 sin depender de g_crypt."
+    "Banner de CAMEL HUB actualizado con colores inspirados en la bandera del Peru.",
+    "No toca perfiles, storage, iconos ni configuraciones por personaje."
   ],
   "files": [
     {
@@ -593,8 +593,8 @@
       "path": "vBot/main.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/main.lua",
       "size": 1632,
-      "adler32": "1e8bea10",
-      "sha256": "c91feca45080a800b3de314c90322beb1ad3b2aa3668187b3f5ad035f1756d58"
+      "adler32": "2225e825",
+      "sha256": "846752de5aa9410179590b79e4cd6458689c58c122cfa0861bd26be7d5228c6f"
     },
     {
       "path": "vBot/new_cavebot_lib.lua",
@@ -725,9 +725,9 @@
     {
       "path": "vBot/CamelHubUpdater.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/CamelHubUpdater.lua",
-      "size": 13844,
-      "adler32": "ccd04eb3",
-      "sha256": "37436156a5efc881a25909d8e3d84899f9c8e7c11c759f6c92348bacd2d778e3"
+      "size": 14143,
+      "adler32": "82b2ac20",
+      "sha256": "a86fbd6d5d936776820bc5be19979ff1dfd10bd59f56d00e03232feb2299ecf6"
     }
   ]
 }
