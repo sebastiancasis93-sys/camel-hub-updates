@@ -358,26 +358,113 @@ end)
 
 
 -- ================================================================
--- Camel Hub Fast Follow
--- Common ComboBot follow engine for every character.
---
--- Stock ComboBot waited until player:isWalking() became false before
--- calculating the leader's newest position. That creates a visible
--- stop/recalculate/step rhythm, especially on fast characters.
---
--- This version refreshes the leader position continuously and lets
--- OTCv8's walk() layer queue/prewalk the next direction while the
--- current step is still finishing.
+-- Camel Hub Fast Follow EXP3
+-- Normal terrain keeps the 50 ms Fast Follow from Core 1.0.5.
+-- Floor changes are handled as exact transition actions.
 -- ================================================================
 
 local toFollow
 local toFollowPos = {}
 local lastFollowDir = nil
 local lastFollowWalk = 0
+local lastLeaderPos = nil
+local lastLeaderSeen = 0
+local floorTransition = nil
+local lastTransitionUse = 0
 
 local FOLLOW_INTERVAL = 50
 local FOLLOW_REISSUE_MS = 80
+local FOLLOW_TRANSITION_REISSUE_MS = 100
 local FOLLOW_MAX_DISTANCE = 20
+local FOLLOW_TRANSITION_TTL = 4000
+local FOLLOW_USE_COOLDOWN = 450
+
+local function copyPos(p, z)
+  if not p then return nil end
+  return {x = p.x, y = p.y, z = z or p.z}
+end
+
+local function cheb(a, b)
+  if not a or not b then return 999 end
+  return math.max(math.abs(a.x - b.x), math.abs(a.y - b.y))
+end
+
+local function isStairPos(p)
+  if not p then return false end
+  local color = g_map.getMinimapColor(p)
+  return color >= 210 and color <= 213
+end
+
+local function addCandidate(list, seen, p)
+  if not p then return end
+  local key = tostring(p.x) .. ":" .. tostring(p.y) .. ":" .. tostring(p.z)
+  if seen[key] then return end
+  seen[key] = true
+  table.insert(list, p)
+end
+
+local function findTransitionEntry(oldPos, newPos)
+  if not oldPos then return nil end
+
+  local candidates = {}
+  local seen = {}
+  local projected = nil
+
+  if newPos then
+    projected = {x = newPos.x, y = newPos.y, z = oldPos.z}
+  end
+
+  addCandidate(candidates, seen, copyPos(oldPos))
+  addCandidate(candidates, seen, projected)
+
+  local centers = {oldPos, projected}
+  for _, center in ipairs(centers) do
+    if center then
+      for dx = -1, 1 do
+        for dy = -1, 1 do
+          addCandidate(candidates, seen, {
+            x = center.x + dx,
+            y = center.y + dy,
+            z = oldPos.z
+          })
+        end
+      end
+    end
+  end
+
+  local myPos = player:getPosition()
+  local best = nil
+  local bestScore = 9999
+
+  for _, candidate in ipairs(candidates) do
+    local score = cheb(candidate, oldPos) * 10
+
+    if isStairPos(candidate) then
+      score = score - 100
+    end
+
+    if myPos and myPos.z == candidate.z then
+      local path = getPath(myPos, candidate, FOLLOW_MAX_DISTANCE, {
+        ignoreNonPathable = true,
+        precision = 0,
+        ignoreStairs = false
+      })
+
+      if path or cheb(myPos, candidate) == 0 then
+        score = score - 30
+      else
+        score = score + 40
+      end
+    end
+
+    if score < bestScore then
+      best = candidate
+      bestScore = score
+    end
+  end
+
+  return best or projected or copyPos(oldPos)
+end
 
 local function resolveFollowName()
   if leaderTarget and config.follow == "LEADER TARGET" and leaderTarget:isPlayer() then
@@ -404,43 +491,146 @@ end
 
 local function refreshFollowPosition(name)
   if not name or name == "" then return end
+
   local target = getCreatureByName(name)
   if target then
     local tpos = target:getPosition()
     if tpos then
       toFollowPos[tpos.z] = tpos
+      lastLeaderPos = copyPos(tpos)
+      lastLeaderSeen = now
     end
   end
+end
+
+local function issueFollowStep(dir, transitionMode)
+  if dir == nil then return false end
+
+  local minRepeat = transitionMode
+      and FOLLOW_TRANSITION_REISSUE_MS
+      or FOLLOW_REISSUE_MS
+
+  if dir == lastFollowDir and now - lastFollowWalk < minRepeat then
+    return false
+  end
+
+  local ok = pcall(function()
+    walk(dir, 0)
+  end)
+
+  if not ok then
+    pcall(function()
+      g_game.walk(dir, true)
+    end)
+  end
+
+  lastFollowDir = dir
+  lastFollowWalk = now
+  return true
+end
+
+local function tryUseTransition(entry)
+  if not entry or now - lastTransitionUse < FOLLOW_USE_COOLDOWN then
+    return false
+  end
+
+  local tile = g_map.getTile(entry)
+  if not tile then return false end
+
+  local thing = tile:getTopUseThing()
+  if not thing then return false end
+
+  local ok = pcall(function()
+    use(thing)
+  end)
+
+  if ok then
+    lastTransitionUse = now
+    return true
+  end
+
+  return false
+end
+
+local function startFloorTransition(oldPos, newPos)
+  if not oldPos then return end
+
+  local entry = findTransitionEntry(oldPos, newPos)
+  if not entry then return end
+
+  floorTransition = {
+    fromZ = oldPos.z,
+    toZ = newPos and newPos.z or nil,
+    entry = entry,
+    started = now
+  }
+
+  toFollowPos[oldPos.z] = entry
+  lastFollowDir = nil
 end
 
 macro(FOLLOW_INTERVAL, function()
   if not config.enabled or not config.followLeaderEnabled then
     toFollow = nil
     lastFollowDir = nil
+    floorTransition = nil
     return
   end
 
   toFollow = resolveFollowName()
   if not toFollow then
     lastFollowDir = nil
+    floorTransition = nil
     return
   end
 
-  -- Always refresh visible leader position, even while already walking.
   refreshFollowPosition(toFollow)
 
-  local p = toFollowPos[posz()]
+  local myPos = player:getPosition()
+  if not myPos then return end
+
+  if floorTransition then
+    if myPos.z ~= floorTransition.fromZ then
+      floorTransition = nil
+      lastFollowDir = nil
+    elseif now - floorTransition.started > FOLLOW_TRANSITION_TTL then
+      floorTransition = nil
+      lastFollowDir = nil
+    end
+  end
+
+  -- Transition mode: reach the exact stair/ladder tile.
+  if floorTransition and myPos.z == floorTransition.fromZ then
+    local entry = floorTransition.entry
+    local dist = cheb(myPos, entry)
+
+    if dist == 0 then
+      tryUseTransition(entry)
+      return
+    end
+
+    local path = getPath(myPos, entry, FOLLOW_MAX_DISTANCE, {
+      ignoreNonPathable = true,
+      precision = 0,
+      ignoreStairs = false
+    })
+
+    if path and path[1] then
+      issueFollowStep(path[1], true)
+      return
+    end
+
+    if dist <= 1 then
+      tryUseTransition(entry)
+    end
+    return
+  end
+
+  -- Normal floor: same Fast Follow as Core 1.0.5.
+  local p = toFollowPos[myPos.z]
   if not p then return end
 
-  local myPos = player:getPosition()
-  if not myPos or myPos.z ~= p.z then return end
-
-  local dist = math.max(
-    math.abs(myPos.x - p.x),
-    math.abs(myPos.y - p.y)
-  )
-
-  -- Standard ComboBot behavior: stay within one sqm of the leader.
+  local dist = cheb(myPos, p)
   if dist <= 1 then
     lastFollowDir = nil
     return
@@ -452,42 +642,45 @@ macro(FOLLOW_INTERVAL, function()
     ignoreStairs = false
   })
 
-  if not path or not path[1] then
-    return
-  end
+  if not path or not path[1] then return end
 
-  local dir = path[1]
-
-  -- Avoid pointless repeated calls for the exact same direction inside
-  -- a tiny window, while still reacting immediately when the leader turns.
-  if dir == lastFollowDir and now - lastFollowWalk < FOLLOW_REISSUE_MS then
-    return
-  end
-
-  local ok = pcall(function()
-    walk(dir, 0)
-  end)
-
-  if not ok then
-    -- Compatibility fallback for clients where the global walk helper differs.
-    pcall(function()
-      g_game.walk(dir, true)
-    end)
-  end
-
-  lastFollowDir = dir
-  lastFollowWalk = now
+  issueFollowStep(path[1], false)
 end)
 
 onCreaturePositionChange(function(creature, oldPos, newPos)
   if not creature or not newPos or not toFollow then return end
-  if creature:getName():lower() == tostring(toFollow):lower() then
-    -- Save every floor position. When the leader goes through stairs/holes,
-    -- the follower can still reach the last known position on its current floor.
-    toFollowPos[newPos.z] = newPos
-    if oldPos and oldPos.z ~= newPos.z then
-      toFollowPos[oldPos.z] = oldPos
-    end
+  if creature:getName():lower() ~= tostring(toFollow):lower() then return end
+
+  toFollowPos[newPos.z] = newPos
+  lastLeaderPos = copyPos(newPos)
+  lastLeaderSeen = now
+
+  if oldPos and oldPos.z ~= newPos.z then
+    startFloorTransition(oldPos, newPos)
+  end
+end)
+
+-- Some OTC clients remove the leader from spectators before delivering
+-- a complete cross-floor position event. If disappearance happens beside
+-- a known stair, remember that stair as the old-floor transition tile.
+onCreatureDisappear(function(creature)
+  if not creature or not toFollow then return end
+  if creature:getName():lower() ~= tostring(toFollow):lower() then return end
+  if not lastLeaderPos or now - lastLeaderSeen > 700 then return end
+
+  local entry = findTransitionEntry(lastLeaderPos, nil)
+  if entry and isStairPos(entry) then
+    startFloorTransition(lastLeaderPos, nil)
+  end
+end)
+
+onPlayerPositionChange(function(newPos, oldPos)
+  if not newPos or not oldPos then return end
+
+  if floorTransition and oldPos.z ~= newPos.z then
+    floorTransition = nil
+    lastFollowDir = nil
+    lastFollowWalk = 0
   end
 end)
 
