@@ -23,23 +23,84 @@ end
 -- main loop, controlled by config
 local actionRetries = 0
 local prevActionResult = true
+
+-- Camel Hub EXP3:
+-- Doors, ladders/stairs and exact precision-0 waypoints get a short
+-- movement-priority window. TargetBot can keep attacking, but its WALK
+-- must not pull the character away during the route interaction.
+local function isCriticalCaveAction(widget)
+  if not widget then return false end
+
+  local actionName = tostring(widget.action or ""):lower()
+  if actionName == "use" or actionName == "usewith" then
+    return true
+  end
+
+  if actionName ~= "goto" then
+    return false
+  end
+
+  local parsed = regexMatch(
+    tostring(widget.value or ""),
+    "\\s*([0-9]+)\\s*,\\s*([0-9]+)\\s*,\\s*([0-9]+),?\\s*([0-9]?)"
+  )
+  if not parsed[1] then return false end
+
+  local dest = {
+    x = tonumber(parsed[1][2]),
+    y = tonumber(parsed[1][3]),
+    z = tonumber(parsed[1][4])
+  }
+  local precision = tonumber(parsed[1][5])
+  local p = player:getPosition()
+
+  if not p or not dest.x or not dest.y or not dest.z or p.z ~= dest.z then
+    return false
+  end
+
+  local dist = math.max(math.abs(dest.x - p.x), math.abs(dest.y - p.y))
+  if dist > 2 then return false end
+
+  local minimapColor = g_map.getMinimapColor(dest)
+  local stairs = minimapColor >= 210 and minimapColor <= 213
+
+  return stairs or precision == 0
+end
+
+local function lockCaveMovement(ms)
+  CaveBot._interactionLockUntil = math.max(
+    CaveBot._interactionLockUntil or 0,
+    now + (ms or 250)
+  )
+end
+
 cavebotMacro = macro(20, function()
-  if TargetBot and TargetBot.isActive() and not TargetBot.isCaveBotActionAllowed() then
-    CaveBot.resetWalking()
-    return -- target bot or looting is working, wait
-  end
-  
-  if CaveBot.doWalking() then
-    return -- executing walking3
-  end
-  
   local actions = ui.list:getChildCount()
   if actions == 0 then return end
+
   local currentAction = ui.list:getFocusedChild()
   if not currentAction then
     currentAction = ui.list:getFirstChild()
   end
-  local action = CaveBot.Actions[currentAction.action]  
+
+  local criticalAction = isCriticalCaveAction(currentAction)
+  local transitionLocked = (CaveBot._transitionLockUntil or 0) > now
+
+  if criticalAction then
+    lockCaveMovement(300)
+  end
+
+  if TargetBot and TargetBot.isActive() and not TargetBot.isCaveBotActionAllowed()
+      and not criticalAction and not transitionLocked then
+    CaveBot.resetWalking()
+    return
+  end
+
+  if CaveBot.doWalking() then
+    return
+  end
+
+  local action = CaveBot.Actions[currentAction.action]
   local value = currentAction.value
   local retry = false
   if action then

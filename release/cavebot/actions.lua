@@ -321,6 +321,7 @@ CaveBot.registerAction("goto", "green", function(value, retries, prev)
 
   local minimapColor = g_map.getMinimapColor(pos)
   local stairs = (minimapColor >= 210 and minimapColor <= 213)
+  local transitionSensitive = stairs or precision == 0
   
   if stairs then
     if math.abs(pos.x-playerPos.x) == 0 and math.abs(pos.y-playerPos.y) <= 0 then
@@ -335,14 +336,17 @@ CaveBot.registerAction("goto", "green", function(value, retries, prev)
   -- Camel Hub Fast Walk EXP2:
   -- Fast path inspired by Sabuezo's optimized GOTO order.
   -- Try walking before the heavier diagnostic path checks.
-  if not CaveBot.Config.get("ignoreFields") and CaveBot.walkTo(pos, 40) then
+  if not CaveBot.Config.get("ignoreFields") and CaveBot.walkTo(pos, 40, {
+    _transition = transitionSensitive
+  }) then
     return "retry"
   end
 
   if CaveBot.walkTo(pos, maxDist, {
     ignoreNonPathable = true,
     allowUnseen = true,
-    allowOnlyVisibleTiles = false
+    allowOnlyVisibleTiles = false,
+    _transition = transitionSensitive
   }) then
     return "retry"
   end
@@ -408,7 +412,13 @@ CaveBot.registerAction("goto", "green", function(value, retries, prev)
     if stairs then
       precison = 0
     end
-    if CaveBot.walkTo(pos, 50, { ignoreNonPathable = true, precision = precison, allowUnseen = true, allowOnlyVisibleTiles = false }) then
+    if CaveBot.walkTo(pos, 50, {
+      ignoreNonPathable = true,
+      precision = precison,
+      allowUnseen = true,
+      allowOnlyVisibleTiles = false,
+      _transition = transitionSensitive
+    }) then
       return "retry"
     end    
   end
@@ -426,7 +436,14 @@ CaveBot.registerAction("goto", "green", function(value, retries, prev)
   end
 
   -- everything else failed, try to walk ignoring creatures, maybe will work
-  CaveBot.walkTo(pos, maxDist, { ignoreNonPathable = true, precision = 1, ignoreCreatures = true, allowUnseen = true, allowOnlyVisibleTiles = false })
+  CaveBot.walkTo(pos, maxDist, {
+    ignoreNonPathable = true,
+    precision = 1,
+    ignoreCreatures = true,
+    allowUnseen = true,
+    allowOnlyVisibleTiles = false,
+    _transition = transitionSensitive
+  })
   return "retry"
 end)
 
@@ -461,6 +478,12 @@ CaveBot.registerAction("use", "#FFB272", function(value, retries, prev)
   if not topThing then
     return false
   end
+
+  local interactionWait = CaveBot.Config.get("useDelay") + CaveBot.Config.get("ping") + 200
+  CaveBot._interactionLockUntil = math.max(
+    CaveBot._interactionLockUntil or 0,
+    now + interactionWait
+  )
 
   use(topThing)
   CaveBot.delay(CaveBot.Config.get("useDelay") + CaveBot.Config.get("ping"))
@@ -498,6 +521,12 @@ CaveBot.registerAction("usewith", "#EEB292", function(value, retries, prev)
   if not topThing then
     return false
   end
+
+  local interactionWait = CaveBot.Config.get("useDelay") + CaveBot.Config.get("ping") + 200
+  CaveBot._interactionLockUntil = math.max(
+    CaveBot._interactionLockUntil or 0,
+    now + interactionWait
+  )
 
   usewith(itemid, topThing)
   CaveBot.delay(CaveBot.Config.get("useDelay") + CaveBot.Config.get("ping"))
