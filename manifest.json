@@ -1,21 +1,21 @@
 {
   "product": "Camel Hub",
   "channel": "stable",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "updaterProtocol": "normalized-adler32-v2",
   "summary": [
-    "ComboBot Fast Follow comun para todos los personajes.",
-    "El follow actualiza la posicion del leader cada 50 ms y permite queue/prewalk.",
-    "Elimina la espera obligatoria a que player:isWalking() sea false.",
-    "No modifica perfiles, storage, Rescue, boosts, curaciones ni ataques del ComboBot."
+    "Transitions EXP3 validadas: escaleras, puertas y cambios de piso estables.",
+    "CaveBot/TargetBot mantienen Fast Walk en terreno normal y modo seguro en transiciones.",
+    "ComboBot Fast Follow sigue al leader entre pisos con precision 0 y soporte de use.",
+    "No modifica perfiles, storage, iconos ni sistema Rescue/Summoner."
   ],
   "files": [
     {
       "path": "cavebot/actions.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/actions.lua",
-      "normalizedSize": 15194,
-      "adler32": "7675a078",
-      "sha256": "1e45214a12709e54627d5fec4fe86d6b08aa076780a997cf9c43be33482309fe"
+      "normalizedSize": 15877,
+      "adler32": "0ba879b7",
+      "sha256": "0da459bb7a2d6512cf126cd23df55e6c15f3a7b1f2267de4091fa9a42d5f4eeb"
     },
     {
       "path": "cavebot/bank.lua",
@@ -34,9 +34,9 @@
     {
       "path": "cavebot/cavebot.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/cavebot.lua",
-      "normalizedSize": 12291,
-      "adler32": "05f64763",
-      "sha256": "5b2ba56db759d91cd0b1208d2d1262b8616ff06dbcdc21fa32fd79414b5394e0"
+      "normalizedSize": 13850,
+      "adler32": "e55f44fb",
+      "sha256": "7f2e202e8953b466fe67f68bd39613bbeb1667cf78533bf53fda61eee55adb4f"
     },
     {
       "path": "cavebot/cavebot.otui",
@@ -195,9 +195,9 @@
     {
       "path": "cavebot/walking.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/walking.lua",
-      "normalizedSize": 3915,
-      "adler32": "14cdd93b",
-      "sha256": "3d3c203d87c8d02ecd10e9c41e0634f47886942ec2fe5bb36506c22ae8ec48e4"
+      "normalizedSize": 5534,
+      "adler32": "e43fcd6b",
+      "sha256": "399e9f288ef666cb194078c9b6e97589f1ad690ff7bd98b4a36975254be6b421"
     },
     {
       "path": "cavebot/withdraw.lua",
@@ -272,9 +272,9 @@
     {
       "path": "targetbot/walking.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/targetbot/walking.lua",
-      "normalizedSize": 1168,
-      "adler32": "f8e57d7e",
-      "sha256": "b3900286669fe1e7b9f0d39f4861bf8835fa7c2eeb473213ac1be3cb56220918"
+      "normalizedSize": 1460,
+      "adler32": "1377e119",
+      "sha256": "068b4b9fcaa3262455162ac5cd182d6a5e8893793a0ad7b77baf0f9a3e3e239a"
     },
     {
       "path": "vBot/AttackBot.lua",
@@ -482,9 +482,9 @@
     {
       "path": "vBot/combo.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/combo.lua",
-      "normalizedSize": 17123,
-      "adler32": "c60c1a75",
-      "sha256": "4eadba1e753f4a857dc65e2565088e8c3c71cf56fba0d7cc1b1a307ab4746e6c"
+      "normalizedSize": 21328,
+      "adler32": "d0c74534",
+      "sha256": "9040df445e462a0def2691ed014d0bd7e2a9ca8c6499b3d794d26b449b973304"
     },
     {
       "path": "vBot/combo.otui",

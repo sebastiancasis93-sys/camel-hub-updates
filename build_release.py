@@ -2,7 +2,7 @@
 from pathlib import Path
 import hashlib, json, sys, zlib
 
-VERSION = "1.0.5"
+VERSION = "1.0.6"
 ROOT = Path(__file__).resolve().parent
 RELEASE = ROOT / "release"
 CORE_LIST = ROOT / "CORE_FILES.txt"
