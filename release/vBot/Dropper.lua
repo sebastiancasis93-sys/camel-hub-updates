@@ -1,5 +1,9 @@
 setDefaultTab("Tools")
 
+-- Camel Hub UI spacing between AttackBot area and Dropper.
+UI.Separator()
+
+
 local ui = setupUI([[
 Panel
   height: 19

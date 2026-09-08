@@ -43,6 +43,7 @@ function CamelPots.useFullHp()
   return true
 end
 
+
 -- Compact HP row: replaces the space previously occupied by Eat/Conjure Food.
 local potUi = setupUI([[
 Panel

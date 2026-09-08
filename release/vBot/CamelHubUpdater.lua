@@ -1,11 +1,11 @@
--- Camel Hub Updater SAFE bootstrap v1.0.3
--- Loaded LAST under pcall so updater errors can never stop the bot core.
+-- Camel Hub Updater SAFE bootstrap v1.0.6 (no-cache)
+-- Loaded under pcall by the ordered Camel Hub loader so updater errors cannot stop the bot core.
 -- Character storage/profiles/routes/icons remain outside the common whitelist.
 
 setDefaultTab("Main")
 
 CamelHubUpdater = CamelHubUpdater or {}
-CamelHubUpdater.clientVersion = "1.0.4-safe"
+CamelHubUpdater.clientVersion = "1.0.6-safe"
 
 local panelKey = "camelHubUpdater"
 storage[panelKey] = storage[panelKey] or {}
@@ -15,6 +15,7 @@ cfg.manifestUrl = "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-
 if cfg.autoReload == nil then cfg.autoReload = true end
 
 local COMMON_PATHS = {
+  ["_Loader.lua"] = true,
   ["cavebot/actions.lua"] = true,
   ["cavebot/bank.lua"] = true,
   ["cavebot/buy_supplies.lua"] = true,
@@ -58,6 +59,10 @@ local COMMON_PATHS = {
   ["vBot/BotServer.lua"] = true,
   ["vBot/BotServer.otui"] = true,
   ["vBot/CamelPots.lua"] = true,
+  ["vBot/CamelImmortal.lua"] = true,
+  ["vBot/CamelImmortal.otui"] = true,
+  ["vBot/Buffguild.lua"] = true,
+  ["vBot/CamelAnalyzerLauncher.lua"] = true,
   ["vBot/CamelCommonMacros.lua"] = true,
   ["vBot/Conditions.lua"] = true,
   ["vBot/Conditions.otui"] = true,
@@ -87,7 +92,6 @@ local COMMON_PATHS = {
   ["vBot/configs.lua"] = true,
   ["vBot/depositer_config.lua"] = true,
   ["vBot/depositer_config.otui"] = true,
-  ["vBot/equip.lua"] = true,
   ["vBot/equipper.otui"] = true,
   ["vBot/exeta.lua"] = true,
   ["vBot/extras.lua"] = true,
@@ -310,9 +314,34 @@ local function pendingFiles(manifest)
   return pending
 end
 
+local requestSerial = 0
+
+local function cacheBustedUrl(url)
+  requestSerial = requestSerial + 1
+
+  local stamp = 0
+  if os and os.time then
+    local ok, value = pcall(os.time)
+    if ok and value then stamp = value end
+  end
+
+  -- "now" is available in vBot/OTCv8 and adds millisecond-level variation.
+  local tick = tonumber(now) or 0
+  local separator = tostring(url):find("?", 1, true) and "&" or "?"
+
+  return tostring(url)
+      .. separator
+      .. "camelhub_nc="
+      .. tostring(stamp)
+      .. "_"
+      .. tostring(tick)
+      .. "_"
+      .. tostring(requestSerial)
+end
+
 local function fetchManifest(callback)
   setStatus("Revisando actualizaciones...", "#ffd166")
-  HTTP.get(cfg.manifestUrl, function(data, err)
+  HTTP.get(cacheBustedUrl(cfg.manifestUrl), function(data, err)
     if err or not data then
       setStatus("No se pudo leer manifest.", "#ff8a8a")
       if callback then callback(nil) end
@@ -360,7 +389,7 @@ local function installNext(manifest, list, index, installed)
   local entry = list[index]
   local rel = normalizePath(entry.path)
   setStatus("Actualizando " .. index .. "/" .. #list .. "\n" .. rel, "#ffd166")
-  HTTP.get(entry.url, function(data, err)
+  HTTP.get(cacheBustedUrl(entry.url), function(data, err)
     if err or not data then
       installing = false
       setStatus("Descarga fallida: " .. rel, "#ff8a8a")
