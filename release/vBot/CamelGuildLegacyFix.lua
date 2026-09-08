@@ -1,15 +1,14 @@
 ---@diagnostic disable: undefined-global
--- Camel Hub / Gampi Guild Legacy Macro Fix
--- Applies to ALL profiles used by the Gampi character/config.
+-- Camel Hub / Gampi Guild Legacy Macro Fix SAFE
+-- Applies to ALL profiles used by Gampi.
 --
--- Keeps these exact legacy macro names because existing Gampi icons use them:
---   Auto Boost Guild
---   Auto Haste Guild
+-- IMPORTANT:
+-- If "Auto Boost Guild" / "Auto Haste Guild" already exist in the active
+-- profile, this module DOES NOT rewrite their callback, timeout or state.
+-- It leaves the proven profile macros exactly as they were created.
 --
--- If a profile already created those macros in In-Game Script Groups, this
--- module upgrades the existing macro objects in-place (same switch/state/icon).
--- If a profile does not contain them, the module creates them automatically
--- inside the In-Game Script Groups window.
+-- If a Gampi profile does not contain them, this module creates them with
+-- the same improved logic and the same names used by the existing icons.
 
 local function isGampi()
   local okName, playerName = pcall(function()
@@ -110,18 +109,6 @@ local function registryMacro(name)
   return list[#list]
 end
 
-local function replaceCallback(object, callback)
-  if not object then return false end
-
-  object.timeout = 600
-  object.callback = function()
-    callback()
-    return true
-  end
-
-  return true
-end
-
 local function createLegacyMacro(name, callback)
   local parent = nil
 
@@ -129,16 +116,15 @@ local function createLegacyMacro(name, callback)
     parent = CamelScriptGroups.getMacroParent()
   end
 
-  -- Official OTCv8 macro signature supports:
-  -- macro(timeout, name, callback, parent)
   return macro(600, name, callback, parent)
 end
 
 local function ensureLegacyMacro(name, callback)
   local object = registryMacro(name)
 
+  -- SAFE: profile macro wins.
+  -- Do not rewrite a macro that already exists.
   if object then
-    replaceCallback(object, callback)
     return object
   end
 
@@ -146,13 +132,14 @@ local function ensureLegacyMacro(name, callback)
 end
 
 CamelGampiGuildLegacy = CamelGampiGuildLegacy or {}
+CamelGampiGuildLegacy.version = "1.1-safe"
 CamelGampiGuildLegacy.boost = ensureLegacyMacro("Auto Boost Guild", boostCallback)
 CamelGampiGuildLegacy.haste = ensureLegacyMacro("Auto Haste Guild", hasteCallback)
 
-CamelGampiGuildLegacy.version = "1.0"
 CamelGampiGuildLegacy.getBoost = function()
   return registryMacro("Auto Boost Guild")
 end
+
 CamelGampiGuildLegacy.getHaste = function()
   return registryMacro("Auto Haste Guild")
 end
