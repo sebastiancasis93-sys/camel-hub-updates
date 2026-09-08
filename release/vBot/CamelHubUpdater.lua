@@ -1,11 +1,11 @@
--- Camel Hub Updater SAFE bootstrap v1.0.6 (no-cache)
+-- Camel Hub Updater SAFE bootstrap v1.0.7 (no-cache)
 -- Loaded under pcall by the ordered Camel Hub loader so updater errors cannot stop the bot core.
 -- Character storage/profiles/routes/icons remain outside the common whitelist.
 
 setDefaultTab("Main")
 
 CamelHubUpdater = CamelHubUpdater or {}
-CamelHubUpdater.clientVersion = "1.0.6-safe"
+CamelHubUpdater.clientVersion = "1.0.7-safe"
 
 local panelKey = "camelHubUpdater"
 storage[panelKey] = storage[panelKey] or {}
@@ -101,7 +101,9 @@ local COMMON_PATHS = {
   ["vBot/friend_healer.lua"] = true,
   ["vBot/friend_healer.otui"] = true,
   ["vBot/hold_target.lua"] = true,
+  ["vBot/ingame_editor.lua"] = true,
   ["vBot/ingame_editor.otui"] = true,
+  ["vBot/CamelGuildLegacyFix.lua"] = true,
   ["vBot/items.lua"] = true,
   ["vBot/main.lua"] = true,
   ["vBot/new_cavebot_lib.lua"] = true,

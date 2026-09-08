@@ -182,9 +182,137 @@ local function updateManaLabel()
     ui.manaLabel:setText("Stop Mana <= " .. config.manaStop .. "%")
 end
 
+-- ==========================================================
+-- GAMPI: PUENTE A LOS MACROS ANTIGUOS
+-- ==========================================================
+-- Estos dos macros se mantienen intactos en profile_1:
+--   Auto Boost Guild
+--   Auto Haste Guild
+--
+-- Guild Buff V23 solamente controla su estado ON/OFF.
+-- Los iconos de Gampi siguen controlando esos mismos macros.
+
+local function isGampiLegacyBridgeEnabled()
+    local okName, playerName = pcall(function()
+        return player and player:getName()
+    end)
+
+    if okName and tostring(playerName or ""):lower() == "gampi" then
+        return true
+    end
+
+    local okCfg, configName = pcall(function()
+        return modules.game_bot.contentsPanel.config:getCurrentOption().text
+    end)
+
+    return okCfg and tostring(configName or ""):lower() == "gampi"
+end
+
+local legacyMacroNames = {
+    boost = "Auto Boost Guild",
+    haste = "Auto Haste Guild"
+}
+
+local legacyMacroBound = {
+    boost = false,
+    haste = false
+}
+
+local legacyPendingChoice = {
+    boost = nil,
+    haste = nil
+}
+
+local function findLegacyMacro(kind)
+    if not isGampiLegacyBridgeEnabled() then
+        return nil
+    end
+
+    if not AthalarMacroRegistry or not AthalarMacroRegistry.byName then
+        return nil
+    end
+
+    local list = AthalarMacroRegistry.byName[legacyMacroNames[kind]]
+    if type(list) ~= "table" or #list == 0 then
+        return nil
+    end
+
+    return list[#list]
+end
+
+local function getLegacyState(object)
+    if not object or type(object.isOn) ~= "function" then return nil end
+
+    local ok, enabled = pcall(function()
+        return object:isOn()
+    end)
+
+    if ok then return enabled == true end
+    return nil
+end
+
+local function setLegacyState(object, enabled)
+    if not object then return false end
+
+    if enabled then
+        if type(object.setOn) ~= "function" then return false end
+        return pcall(function() object:setOn() end)
+    else
+        if type(object.setOff) ~= "function" then return false end
+        return pcall(function() object:setOff() end)
+    end
+end
+
+local function setLegacyDesired(kind, enabled)
+    legacyPendingChoice[kind] = enabled == true
+
+    local object = findLegacyMacro(kind)
+    if object then
+        setLegacyState(object, enabled == true)
+        legacyMacroBound[kind] = true
+        legacyPendingChoice[kind] = nil
+    end
+end
+
+local function syncLegacyMacro(kind)
+    local object = findLegacyMacro(kind)
+    if not object then return false end
+
+    -- Si el usuario tocó el switch antes de que cargue profile_1,
+    -- respetamos esa elección. Si no, adoptamos el estado real del macro.
+    if not legacyMacroBound[kind] then
+        if legacyPendingChoice[kind] ~= nil then
+            setLegacyState(object, legacyPendingChoice[kind])
+            legacyPendingChoice[kind] = nil
+        end
+        legacyMacroBound[kind] = true
+    end
+
+    local enabled = getLegacyState(object)
+    if enabled == nil then return true end
+
+    if kind == "boost" then
+        config.boostEnabled = enabled
+        ui.switchBoost:setOn(enabled)
+
+    elseif kind == "haste" then
+        config.hasteEnabled = enabled
+
+        if enabled then
+            config.tempoEnabled = false
+            ui.switchTempo:setOn(false)
+        end
+
+        ui.switchHaste:setOn(enabled)
+    end
+
+    return true
+end
+
 ui.switchBoost.onClick = function(widget)
     config.boostEnabled = not config.boostEnabled
     widget:setOn(config.boostEnabled)
+    setLegacyDesired("boost", config.boostEnabled)
 end
 
 ui.switchHaste.onClick = function(widget)
@@ -194,6 +322,7 @@ ui.switchHaste.onClick = function(widget)
         ui.switchTempo:setOn(false)
     end
     widget:setOn(config.hasteEnabled)
+    setLegacyDesired("haste", config.hasteEnabled)
 end
 
 ui.switchTempo.onClick = function(widget)
@@ -201,6 +330,7 @@ ui.switchTempo.onClick = function(widget)
     if config.tempoEnabled then
         config.hasteEnabled = false
         ui.switchHaste:setOn(false)
+        setLegacyDesired("haste", false)
     end
     widget:setOn(config.tempoEnabled)
 end
@@ -256,6 +386,10 @@ end
 -- 4. LANZAMIENTO DE BOOST (Dueño de la prioridad)
 -- ==========================================================
 local function castBoost()
+    -- Gampi: el macro antiguo "Auto Boost Guild" es el que lanza el spell.
+    -- Guild Buff V23 solo controla su ON/OFF.
+    if findLegacyMacro("boost") then return false end
+
     if not config.boostEnabled then
         setBoostStatus("Boost: OFF")
         return false
@@ -312,6 +446,11 @@ end
 -- ==========================================================
 local function castSpeed()
     local cfg = config
+
+    -- Gampi: el macro antiguo "Auto Haste Guild" es el que lanza ExuraHaste.
+    -- ExuraTempo sigue siendo manejado normalmente por Guild Buff V23.
+    if cfg.hasteEnabled and findLegacyMacro("haste") then return false end
+
     if not (cfg.hasteEnabled or cfg.tempoEnabled) then return false end
     if not enoughMana() then return false end
     if now < nextGuildBuffCastAt or now < lastGlobalSpeed then return false end
@@ -375,6 +514,14 @@ onTextMessage(function(mode, text)
     nextGuildBuffCastAt = now + retryAfterExhaust
     recentGuildBuffAttempt = nil
     setBoostStatus("Reintento: exhaust")
+end)
+
+-- ==========================================================
+-- GAMPI: SINCRONIZACIÓN PANEL <-> MACROS ANTIGUOS <-> ICONOS
+-- ==========================================================
+macro(200, function()
+    syncLegacyMacro("boost")
+    syncLegacyMacro("haste")
 end)
 
 -- ==========================================================

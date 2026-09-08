@@ -14,7 +14,7 @@ CamelScriptGroupRow < Panel
     anchors.left: enabled.right
     anchors.verticalCenter: parent.verticalCenter
     margin-left: 4
-    width: 150
+    width: 135
     height: 20
     font: verdana-11px-rounded
 
@@ -22,12 +22,24 @@ CamelScriptGroupRow < Panel
     id: status
     anchors.left: name.right
     anchors.verticalCenter: parent.verticalCenter
-    margin-left: 7
-    width: 58
+    margin-left: 5
+    width: 50
     height: 18
     text-align: center
     font: verdana-11px-rounded
     text: OFF
+
+  Label
+    id: count
+    anchors.left: status.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 4
+    width: 24
+    height: 18
+    text-align: center
+    font: verdana-11px-rounded
+    color: #9dd1ce
+    text: 0
 
   Button
     id: edit
@@ -39,7 +51,7 @@ CamelScriptGroupRow < Panel
 
 CamelScriptGroupsWindow < MainWindow
   !text: tr('Camel Hub - Script Groups')
-  size: 390 315
+  size: 410 455
   @onEscape: self:hide()
 
   Label
@@ -47,20 +59,31 @@ CamelScriptGroupsWindow < MainWindow
     anchors.left: parent.left
     anchors.right: parent.right
     anchors.top: parent.top
-    height: 38
+    height: 34
     text-align: center
     font: verdana-11px-rounded
     color: #9dd1ce
-    text: Each group has its own Lua macros.\nEnable only the groups you want loaded.
+    text: Each group has its own Lua macros.\nMacro switches are shown below.
+
+  Label
+    id: groupsTitle
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: help.bottom
+    margin-top: 2
+    height: 18
+    text-align: center
+    font: verdana-11px-rounded
+    color: #ff7a00
+    text: Script Groups
 
   ScrollablePanel
     id: list
     anchors.left: parent.left
     anchors.right: parent.right
-    anchors.top: help.bottom
-    anchors.bottom: separator.top
-    margin-top: 5
-    margin-bottom: 8
+    anchors.top: groupsTitle.bottom
+    height: 190
+    margin-top: 3
     vertical-scrollbar: listScrollBar
     layout: verticalBox
 
@@ -69,6 +92,44 @@ CamelScriptGroupsWindow < MainWindow
     anchors.top: list.top
     anchors.bottom: list.bottom
     anchors.right: list.right
+    step: 20
+    pixels-scroll: true
+
+  HorizontalSeparator
+    id: macroSeparator
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: list.bottom
+    margin-top: 7
+
+  Label
+    id: macrosTitle
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: macroSeparator.bottom
+    margin-top: 4
+    height: 18
+    text-align: center
+    font: verdana-11px-rounded
+    color: #ff7a00
+    text: Macros de grupos activos
+
+  ScrollablePanel
+    id: macroList
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: macrosTitle.bottom
+    anchors.bottom: separator.top
+    margin-top: 3
+    margin-bottom: 8
+    vertical-scrollbar: macroListScrollBar
+    layout: verticalBox
+
+  VerticalScrollBar
+    id: macroListScrollBar
+    anchors.top: macroList.top
+    anchors.bottom: macroList.bottom
+    anchors.right: macroList.right
     step: 20
     pixels-scroll: true
 
@@ -97,7 +158,7 @@ CamelScriptGroupsWindow < MainWindow
     text-align: center
     font: verdana-11px-rounded
     color: #aaaaaa
-    text: Changes apply on reload
+    text: switches reales
 
   Button
     id: closeButton
