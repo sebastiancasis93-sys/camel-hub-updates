@@ -15,6 +15,13 @@ end
 TargetBot.walk = function()
   if not dest then return end
 
+  -- CaveBot can briefly reserve movement for doors/stairs/floor transitions.
+  -- TargetBot still attacks; only its walking is paused.
+  if CaveBot then
+    if (CaveBot._interactionLockUntil or 0) > now then return end
+    if (CaveBot._transitionLockUntil or 0) > now then return end
+  end
+
   local pos = player:getPosition()
   if pos.z ~= dest.z then return end
 
