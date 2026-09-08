@@ -1,3 +1,4 @@
+_Loader.lua
 cavebot/actions.lua
 cavebot/bank.lua
 cavebot/buy_supplies.lua
@@ -70,7 +71,6 @@ vBot/combo.otui
 vBot/configs.lua
 vBot/depositer_config.lua
 vBot/depositer_config.otui
-vBot/equip.lua
 vBot/equipper.otui
 vBot/exeta.lua
 vBot/extras.lua
@@ -101,3 +101,7 @@ vBot/vlib.lua
 vBot/xeno_menu.lua
 zFreeScripts/zAutoBuff.lua
 zFreeScripts/z_Auto-Party.lua
+vBot/CamelImmortal.lua
+vBot/CamelImmortal.otui
+vBot/Buffguild.lua
+vBot/CamelAnalyzerLauncher.lua

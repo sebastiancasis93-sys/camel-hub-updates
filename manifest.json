@@ -1,15 +1,25 @@
 {
   "product": "Camel Hub",
   "channel": "stable",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "updaterProtocol": "normalized-adler32-v2",
   "summary": [
-    "Transitions EXP3 validadas: escaleras, puertas y cambios de piso estables.",
-    "CaveBot/TargetBot mantienen Fast Walk en terreno normal y modo seguro en transiciones.",
-    "ComboBot Fast Follow sigue al leader entre pisos con precision 0 y soporte de use.",
-    "No modifica perfiles, storage, iconos ni sistema Rescue/Summoner."
+    "Consolida la base EXP7 aprobada como Camel Hub Core 1.0.7.",
+    "Agrega Inmortal Full Setup: Magic Shield, Might/Ring y Amulet.",
+    "Agrega Guild Buff V23 y retira Simple Equipper del Core activo.",
+    "Agrega TargetBots universales Monsters/Todo mediante bootstrap sin sobrescribir ediciones manuales.",
+    "Agrega Energy Ring en Tools y el Analyzer completo de Sabuezo en Main.",
+    "Mantiene Fast Walk EXP2, transiciones EXP3 y ComboBot Fast Follow entre pisos.",
+    "Preserva storage, perfiles, rutas, iconos y Rescue/Summoner."
   ],
   "files": [
+    {
+      "path": "_Loader.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/_Loader.lua",
+      "normalizedSize": 3200,
+      "adler32": "0cf60012",
+      "sha256": "350736b1021b1c494def2a8be57f0df741be831bdc27232ee0595e85b8d6a328"
+    },
     {
       "path": "cavebot/actions.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/actions.lua",
@@ -307,9 +317,9 @@
     {
       "path": "vBot/CamelPots.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/CamelPots.lua",
-      "normalizedSize": 3036,
-      "adler32": "1c1edba9",
-      "sha256": "69dc0cad3521803149c87241ef7b8669f7c493510abc35850e46cdd2112ade52"
+      "normalizedSize": 3037,
+      "adler32": "dac2dbb3",
+      "sha256": "b066a20f312539a35d423671764a2e2051c53140768806138a3c0306b0148bc4"
     },
     {
       "path": "vBot/CamelCommonMacros.lua",
@@ -342,9 +352,9 @@
     {
       "path": "vBot/Dropper.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/Dropper.lua",
-      "normalizedSize": 3454,
-      "adler32": "637730f3",
-      "sha256": "b0cb534fae63ed27946e9bf8e07b5a70b82fb28d43ad8f6928bcb8ddb0f712ea"
+      "normalizedSize": 3531,
+      "adler32": "44c04a24",
+      "sha256": "7e82212dd4ef498de18c746784c40a9d846014387cef0d8706053b347ac813f6"
     },
     {
       "path": "vBot/Equipper.lua",
@@ -433,16 +443,16 @@
     {
       "path": "vBot/analyzer.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/analyzer.lua",
-      "normalizedSize": 54784,
-      "adler32": "59c7da15",
-      "sha256": "ee5703327ecc64891231e4e8e551ca8934d27f76d122c01b4e847e11489aa291"
+      "normalizedSize": 37241,
+      "adler32": "8ee30d4a",
+      "sha256": "d39162974c38380d81f82c866abb89041a9fabf07e8673ef05031a71ffaea3f2"
     },
     {
       "path": "vBot/analyzer.otui",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/analyzer.otui",
-      "normalizedSize": 10071,
-      "adler32": "df107d7a",
-      "sha256": "41f566f686d77176f23b3c4b6998fa9b10d9a47682f7a585570b1b64a5e6959a"
+      "normalizedSize": 4932,
+      "adler32": "bf191c66",
+      "sha256": "6434e2cd66f8fede7860baaed730a57d1a27b79c9bae75dece95442702d9b63c"
     },
     {
       "path": "vBot/cast_food.lua",
@@ -513,13 +523,6 @@
       "normalizedSize": 2112,
       "adler32": "eb859c0e",
       "sha256": "e9191e720cad9ced893c77e4c450df5cb9841117505d7a9fc74a1ecb2f011242"
-    },
-    {
-      "path": "vBot/equip.lua",
-      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/equip.lua",
-      "normalizedSize": 1393,
-      "adler32": "1906b7dc",
-      "sha256": "15fe160b72c822c45bfd2249c3733c8c2b521bcce874290a264f09c7540251d4"
     },
     {
       "path": "vBot/equipper.otui",
@@ -601,9 +604,9 @@
     {
       "path": "vBot/main.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/main.lua",
-      "normalizedSize": 1632,
-      "adler32": "2225e825",
-      "sha256": "846752de5aa9410179590b79e4cd6458689c58c122cfa0861bd26be7d5228c6f"
+      "normalizedSize": 1638,
+      "adler32": "50f3eaec",
+      "sha256": "e44db2c8195caefce8d9d27d4a80bf973d1ab89d1cb7218d35825ec830d05cb8"
     },
     {
       "path": "vBot/new_cavebot_lib.lua",
@@ -699,9 +702,9 @@
     {
       "path": "vBot/tools.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/tools.lua",
-      "normalizedSize": 877,
-      "adler32": "a53616c5",
-      "sha256": "162072ce09f0f09975280cd6d20266e9c2e2a4723d66ee2bbd7099109906d97c"
+      "normalizedSize": 31256,
+      "adler32": "5a952e6e",
+      "sha256": "0c820e6787da7f0352b834b315288d7a9a698b9cddecc25e1747c966ff42d2ad"
     },
     {
       "path": "vBot/vlib.lua",
@@ -730,6 +733,34 @@
       "normalizedSize": 10185,
       "adler32": "a88f0e69",
       "sha256": "84698d9046fbf277f4a78ceca1e3a379e4981979f99a41cbc882923f80962d3b"
+    },
+    {
+      "path": "vBot/CamelImmortal.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/CamelImmortal.lua",
+      "normalizedSize": 17497,
+      "adler32": "86a1f820",
+      "sha256": "c0d4fa89d7fec8d7c2eb719c9526597b53fd51f06898f4dfcd5ff394fa9b5dfb"
+    },
+    {
+      "path": "vBot/CamelImmortal.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/CamelImmortal.otui",
+      "normalizedSize": 9423,
+      "adler32": "67b6f432",
+      "sha256": "c87b6ebee9570984628d8e305e84d1a3061e68ad4456d68c580597b05858e694"
+    },
+    {
+      "path": "vBot/Buffguild.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/Buffguild.lua",
+      "normalizedSize": 12137,
+      "adler32": "2d5585d8",
+      "sha256": "be88c4c9218af2c091ab92deab34142db096d6cde34cb0cfe99833384b58b8e4"
+    },
+    {
+      "path": "vBot/CamelAnalyzerLauncher.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/CamelAnalyzerLauncher.lua",
+      "normalizedSize": 559,
+      "adler32": "bdf0b866",
+      "sha256": "67de7ee7a8c01c96bd1847901f0bc19c75a8553ca721c09d235e86fdeb5ce3fb"
     }
   ]
 }

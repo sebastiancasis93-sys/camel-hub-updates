@@ -2,7 +2,7 @@
 from pathlib import Path
 import hashlib, json, sys, zlib
 
-VERSION = "1.0.6"
+VERSION = "1.0.7"
 ROOT = Path(__file__).resolve().parent
 RELEASE = ROOT / "release"
 CORE_LIST = ROOT / "CORE_FILES.txt"
@@ -48,17 +48,17 @@ manifest = {
     "version": VERSION,
     "updaterProtocol": "normalized-adler32-v2",
     "summary": [
-        "COMMON real para los 10 personajes: F6 Cave+Target, Anti-Push seguro y Anti-PK.",
-        "Agrega vBot/CamelCommonMacros.lua al Core compartido.",
-        "Anti-Push limitado a Gold Coin 3031 y Platinum Coin 3035.",
-        "Rescue y configuraciones por personaje permanecen protegidos.",
-        "Updater excluido del auto-update."
+        "Consolida la base EXP7 aprobada como Camel Hub Core 1.0.7.",
+        "Inmortal Full Setup, Guild Buff V23, Energy Ring y Analyzer de Sabuezo.",
+        "TargetBots Monsters/Todo universales mediante bootstrap sin sobrescribir ediciones manuales.",
+        "Fast Walk EXP2, transiciones EXP3 y ComboBot Fast Follow preservados.",
+        "Storage, perfiles, rutas, iconos y Rescue/Summoner permanecen protegidos."
     ],
     "files": files
 }
 
 out = ROOT / "manifest.json"
-out.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+out.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 print(f"Creado: {out}")
 print(f"Version: {VERSION}")
 print(f"Archivos: {len(files)}")
