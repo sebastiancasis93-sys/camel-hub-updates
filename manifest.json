@@ -6,7 +6,7 @@
   "summary": [
     "In-Game Script Groups SAFE: los switches de macros de grupos activos se muestran dentro de su ventana y no en Main.",
     "Gampi: Guild Buff V23 ExuraBoost controla Auto Boost Guild y ExuraHaste controla Auto Haste Guild.",
-    "Gampi: los macros legacy se mejoran en runtime para todos los perfiles, con isFriend + emblem fallback y cooldowns seguros.",
+    "Gampi hotfix final: si los macros legacy ya existen en el perfil, CamelGuildLegacyFix NO reescribe su callback/timeout; solo los crea si faltan.",
     "Los iconos Boost Guild/Haste Guild siguen vinculados a los macros legacy existentes.",
     "Storage, perfiles, rutas, iconos, Target/Cave configs y Rescue/Summoner permanecen protegidos."
   ],
@@ -756,9 +756,9 @@
     {
       "path": "vBot/CamelGuildLegacyFix.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/CamelGuildLegacyFix.lua",
-      "normalizedSize": 3779,
-      "adler32": "1ebbda16",
-      "sha256": "653d020494b6314ee4a87764861cbcf1d70605175aad5f7555d9180ae44755cd"
+      "normalizedSize": 3502,
+      "adler32": "1fda7ac2",
+      "sha256": "c327dfca7bb21755cc0d5df7a5ee6fe16398c4c875d834b3337ef86ddff3ae26"
     },
     {
       "path": "vBot/Buffguild.lua",
