@@ -1,24 +1,22 @@
 {
   "product": "Camel Hub",
   "channel": "stable",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "updaterProtocol": "normalized-adler32-v2",
   "summary": [
-    "Consolida la base EXP7 aprobada como Camel Hub Core 1.0.7.",
-    "Agrega Inmortal Full Setup: Magic Shield, Might/Ring y Amulet.",
-    "Agrega Guild Buff V23 y retira Simple Equipper del Core activo.",
-    "Agrega TargetBots universales Monsters/Todo mediante bootstrap sin sobrescribir ediciones manuales.",
-    "Agrega Energy Ring en Tools y el Analyzer completo de Sabuezo en Main.",
-    "Mantiene Fast Walk EXP2, transiciones EXP3 y ComboBot Fast Follow entre pisos.",
-    "Preserva storage, perfiles, rutas, iconos y Rescue/Summoner."
+    "In-Game Script Groups SAFE: los switches de macros de grupos activos se muestran dentro de su ventana y no en Main.",
+    "Gampi: Guild Buff V23 ExuraBoost controla Auto Boost Guild y ExuraHaste controla Auto Haste Guild.",
+    "Gampi: los macros legacy se mejoran en runtime para todos los perfiles, con isFriend + emblem fallback y cooldowns seguros.",
+    "Los iconos Boost Guild/Haste Guild siguen vinculados a los macros legacy existentes.",
+    "Storage, perfiles, rutas, iconos, Target/Cave configs y Rescue/Summoner permanecen protegidos."
   ],
   "files": [
     {
       "path": "_Loader.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/_Loader.lua",
-      "normalizedSize": 3200,
-      "adler32": "0cf60012",
-      "sha256": "350736b1021b1c494def2a8be57f0df741be831bdc27232ee0595e85b8d6a328"
+      "normalizedSize": 3285,
+      "adler32": "6e8a1cab",
+      "sha256": "765663126e6bb1e758f480bd20d8c437e72b71853972522f499daa410ccb75a4"
     },
     {
       "path": "cavebot/actions.lua",
@@ -588,11 +586,18 @@
       "sha256": "a4024f1b9eb382d327f5d7e0304bebc7cbda819bcb5549cb7000ec15199be914"
     },
     {
+      "path": "vBot/ingame_editor.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/ingame_editor.lua",
+      "normalizedSize": 6481,
+      "adler32": "8f1c4a5b",
+      "sha256": "fa86b882800f5cf44db9fdc40c1602db5a37a962e407d51e54c5b21be013305f"
+    },
+    {
       "path": "vBot/ingame_editor.otui",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/ingame_editor.otui",
-      "normalizedSize": 2328,
-      "adler32": "f697ea6f",
-      "sha256": "4f33e9ac9aa2cbbca617b2ea17a859899d6457c586fa1631f1ed499f6681e67b"
+      "normalizedSize": 3656,
+      "adler32": "ed59955d",
+      "sha256": "84737c1be49ab75f3a635eb41748dc33733f83fb4e17a267d64c852c73e46afa"
     },
     {
       "path": "vBot/items.lua",
@@ -749,11 +754,18 @@
       "sha256": "c87b6ebee9570984628d8e305e84d1a3061e68ad4456d68c580597b05858e694"
     },
     {
+      "path": "vBot/CamelGuildLegacyFix.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/CamelGuildLegacyFix.lua",
+      "normalizedSize": 3779,
+      "adler32": "1ebbda16",
+      "sha256": "653d020494b6314ee4a87764861cbcf1d70605175aad5f7555d9180ae44755cd"
+    },
+    {
       "path": "vBot/Buffguild.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/Buffguild.lua",
-      "normalizedSize": 12137,
-      "adler32": "2d5585d8",
-      "sha256": "be88c4c9218af2c091ab92deab34142db096d6cde34cb0cfe99833384b58b8e4"
+      "normalizedSize": 16281,
+      "adler32": "2c2499bf",
+      "sha256": "00e46daf35ecdd201f3768afd961bb7f005b6142bf414f69796d7ee983f1ad07"
     },
     {
       "path": "vBot/CamelAnalyzerLauncher.lua",

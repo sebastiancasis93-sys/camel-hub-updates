@@ -80,6 +80,7 @@ vBot/extrasPvp.otui
 vBot/friend_healer.lua
 vBot/friend_healer.otui
 vBot/hold_target.lua
+vBot/ingame_editor.lua
 vBot/ingame_editor.otui
 vBot/items.lua
 vBot/main.lua
@@ -103,5 +104,6 @@ zFreeScripts/zAutoBuff.lua
 zFreeScripts/z_Auto-Party.lua
 vBot/CamelImmortal.lua
 vBot/CamelImmortal.otui
+vBot/CamelGuildLegacyFix.lua
 vBot/Buffguild.lua
 vBot/CamelAnalyzerLauncher.lua

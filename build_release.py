@@ -2,7 +2,7 @@
 from pathlib import Path
 import hashlib, json, sys, zlib
 
-VERSION = "1.0.7"
+VERSION = "1.0.8"
 ROOT = Path(__file__).resolve().parent
 RELEASE = ROOT / "release"
 CORE_LIST = ROOT / "CORE_FILES.txt"
@@ -48,11 +48,11 @@ manifest = {
     "version": VERSION,
     "updaterProtocol": "normalized-adler32-v2",
     "summary": [
-        "Consolida la base EXP7 aprobada como Camel Hub Core 1.0.7.",
-        "Inmortal Full Setup, Guild Buff V23, Energy Ring y Analyzer de Sabuezo.",
-        "TargetBots Monsters/Todo universales mediante bootstrap sin sobrescribir ediciones manuales.",
-        "Fast Walk EXP2, transiciones EXP3 y ComboBot Fast Follow preservados.",
-        "Storage, perfiles, rutas, iconos y Rescue/Summoner permanecen protegidos."
+        "In-Game Script Groups SAFE: los switches de macros de grupos activos se muestran dentro de su ventana y no en Main.",
+        "Gampi: Guild Buff V23 ExuraBoost controla Auto Boost Guild y ExuraHaste controla Auto Haste Guild.",
+        "Gampi: los macros legacy se mejoran en runtime para todos los perfiles, con isFriend + emblem fallback y cooldowns seguros.",
+        "Los iconos Boost Guild/Haste Guild siguen vinculados a los macros legacy existentes.",
+        "Storage, perfiles, rutas, iconos, Target/Cave configs y Rescue/Summoner permanecen protegidos."
     ],
     "files": files
 }
