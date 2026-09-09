@@ -1,11 +1,11 @@
--- Camel Hub Updater SAFE bootstrap v1.0.7 (no-cache)
+-- Camel Hub Updater SAFE bootstrap v1.0.8 (no-cache)
 -- Loaded under pcall by the ordered Camel Hub loader so updater errors cannot stop the bot core.
 -- Character storage/profiles/routes/icons remain outside the common whitelist.
 
 setDefaultTab("Main")
 
 CamelHubUpdater = CamelHubUpdater or {}
-CamelHubUpdater.clientVersion = "1.0.7-safe"
+CamelHubUpdater.clientVersion = "1.0.8-safe"
 
 local panelKey = "camelHubUpdater"
 storage[panelKey] = storage[panelKey] or {}
@@ -15,6 +15,8 @@ cfg.manifestUrl = "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-
 if cfg.autoReload == nil then cfg.autoReload = true end
 
 local COMMON_PATHS = {
+  -- Buffguild.lua is intentionally NOT common-managed: Gampi has a validated character-specific bridge.
+  -- CamelGuildLegacyFix.lua is retired/inactive and must not be auto-managed.
   ["_Loader.lua"] = true,
   ["cavebot/actions.lua"] = true,
   ["cavebot/bank.lua"] = true,
@@ -61,7 +63,6 @@ local COMMON_PATHS = {
   ["vBot/CamelPots.lua"] = true,
   ["vBot/CamelImmortal.lua"] = true,
   ["vBot/CamelImmortal.otui"] = true,
-  ["vBot/Buffguild.lua"] = true,
   ["vBot/CamelAnalyzerLauncher.lua"] = true,
   ["vBot/CamelCommonMacros.lua"] = true,
   ["vBot/Conditions.lua"] = true,
@@ -103,7 +104,6 @@ local COMMON_PATHS = {
   ["vBot/hold_target.lua"] = true,
   ["vBot/ingame_editor.lua"] = true,
   ["vBot/ingame_editor.otui"] = true,
-  ["vBot/CamelGuildLegacyFix.lua"] = true,
   ["vBot/items.lua"] = true,
   ["vBot/main.lua"] = true,
   ["vBot/new_cavebot_lib.lua"] = true,

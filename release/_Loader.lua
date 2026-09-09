@@ -89,8 +89,7 @@ local luaFiles = {
   "friend_healer",
   "zFreeScripts/zAutoBuff",
   "HealBot",
-  "CamelGuildLegacyFix",    -- Gampi: upgrades/creates legacy Boost/Haste macros for all profiles
-  "Buffguild",              -- Guild Buff V23; Gampi bridges to legacy macros
+  "Buffguild",              -- Guild Buff V23 (Sabuezo) in former Simple Equipper position
   "CamelPots",
 
   -- Combat / utility
