@@ -104,6 +104,4 @@ zFreeScripts/zAutoBuff.lua
 zFreeScripts/z_Auto-Party.lua
 vBot/CamelImmortal.lua
 vBot/CamelImmortal.otui
-vBot/CamelGuildLegacyFix.lua
-vBot/Buffguild.lua
 vBot/CamelAnalyzerLauncher.lua

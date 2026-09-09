@@ -1,22 +1,22 @@
 {
   "product": "Camel Hub",
   "channel": "stable",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "updaterProtocol": "normalized-adler32-v2",
   "summary": [
-    "In-Game Script Groups SAFE: los switches de macros de grupos activos se muestran dentro de su ventana y no en Main.",
-    "Gampi: Guild Buff V23 ExuraBoost controla Auto Boost Guild y ExuraHaste controla Auto Haste Guild.",
-    "Gampi hotfix final: si los macros legacy ya existen en el perfil, CamelGuildLegacyFix NO reescribe su callback/timeout; solo los crea si faltan.",
-    "Los iconos Boost Guild/Haste Guild siguen vinculados a los macros legacy existentes.",
-    "Storage, perfiles, rutas, iconos, Target/Cave configs y Rescue/Summoner permanecen protegidos."
+    "Restauración estable de Gampi: Guild Buff V23 mantiene el bridge probado hacia Auto Boost Guild / Auto Haste Guild.",
+    "Buffguild.lua queda protegido del updater porque Gampi usa una variante validada específica del personaje.",
+    "CamelGuildLegacyFix queda retirado/inactivo y fuera del updater.",
+    "In-Game Script Groups SAFE se mantiene: switches de macros dentro de su ventana, sin alterar macro() ni hotkeys.",
+    "Storage, perfiles, Cave/Target configs, iconos y Rescue/Summoner permanecen protegidos."
   ],
   "files": [
     {
       "path": "_Loader.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/_Loader.lua",
-      "normalizedSize": 3285,
-      "adler32": "6e8a1cab",
-      "sha256": "765663126e6bb1e758f480bd20d8c437e72b71853972522f499daa410ccb75a4"
+      "normalizedSize": 3200,
+      "adler32": "0cf60012",
+      "sha256": "350736b1021b1c494def2a8be57f0df741be831bdc27232ee0595e85b8d6a328"
     },
     {
       "path": "cavebot/actions.lua",
@@ -752,20 +752,6 @@
       "normalizedSize": 9423,
       "adler32": "67b6f432",
       "sha256": "c87b6ebee9570984628d8e305e84d1a3061e68ad4456d68c580597b05858e694"
-    },
-    {
-      "path": "vBot/CamelGuildLegacyFix.lua",
-      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/CamelGuildLegacyFix.lua",
-      "normalizedSize": 3502,
-      "adler32": "1fda7ac2",
-      "sha256": "c327dfca7bb21755cc0d5df7a5ee6fe16398c4c875d834b3337ef86ddff3ae26"
-    },
-    {
-      "path": "vBot/Buffguild.lua",
-      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/Buffguild.lua",
-      "normalizedSize": 16281,
-      "adler32": "2c2499bf",
-      "sha256": "00e46daf35ecdd201f3768afd961bb7f005b6142bf414f69796d7ee983f1ad07"
     },
     {
       "path": "vBot/CamelAnalyzerLauncher.lua",

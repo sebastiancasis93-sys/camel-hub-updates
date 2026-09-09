@@ -2,7 +2,7 @@
 from pathlib import Path
 import hashlib, json, sys, zlib
 
-VERSION = "1.0.8"
+VERSION = "1.0.9"
 ROOT = Path(__file__).resolve().parent
 RELEASE = ROOT / "release"
 CORE_LIST = ROOT / "CORE_FILES.txt"
@@ -23,7 +23,7 @@ allowed = [
 
 files = []
 for rel in allowed:
-    if rel == "vBot/CamelHubUpdater.lua":
+    if rel in {"vBot/CamelHubUpdater.lua", "vBot/Buffguild.lua", "vBot/CamelGuildLegacyFix.lua"}:
         continue
 
     p = RELEASE / rel
@@ -48,17 +48,17 @@ manifest = {
     "version": VERSION,
     "updaterProtocol": "normalized-adler32-v2",
     "summary": [
-        "In-Game Script Groups SAFE: los switches de macros de grupos activos se muestran dentro de su ventana y no en Main.",
-        "Gampi: Guild Buff V23 ExuraBoost controla Auto Boost Guild y ExuraHaste controla Auto Haste Guild.",
-        "Gampi: los macros legacy se mejoran en runtime para todos los perfiles, con isFriend + emblem fallback y cooldowns seguros.",
-        "Los iconos Boost Guild/Haste Guild siguen vinculados a los macros legacy existentes.",
-        "Storage, perfiles, rutas, iconos, Target/Cave configs y Rescue/Summoner permanecen protegidos."
+        "Restauración estable de Gampi con Guild Buff V23 y macros legacy probados.",
+        "Buffguild.lua protegido del updater por ser específico en Gampi.",
+        "CamelGuildLegacyFix retirado/inactivo.",
+        "In-Game Script Groups SAFE preservado."
     ],
     "files": files
 }
 
-out = ROOT / "manifest.json"
-out.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-print(f"Creado: {out}")
-print(f"Version: {VERSION}")
-print(f"Archivos: {len(files)}")
+(ROOT / "manifest.json").write_text(
+    json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",
+    encoding="utf-8"
+)
+
+print(f"Core {VERSION}: {len(files)} archivos")
