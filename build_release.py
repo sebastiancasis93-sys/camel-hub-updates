@@ -2,7 +2,7 @@
 from pathlib import Path
 import hashlib, json, sys, zlib
 
-VERSION = "1.0.9"
+VERSION = "1.0.10"
 ROOT = Path(__file__).resolve().parent
 RELEASE = ROOT / "release"
 CORE_LIST = ROOT / "CORE_FILES.txt"
@@ -48,10 +48,9 @@ manifest = {
     "version": VERSION,
     "updaterProtocol": "normalized-adler32-v2",
     "summary": [
-        "Restauración estable de Gampi con Guild Buff V23 y macros legacy probados.",
-        "Buffguild.lua protegido del updater por ser específico en Gampi.",
-        "CamelGuildLegacyFix retirado/inactivo.",
-        "In-Game Script Groups SAFE preservado."
+        "ComboBot Follow Recovery V2 con recuperación corta del leader.",
+        "Mejora puertas abiertas/cerradas sin tocar datos privados por jugador.",
+        "CaveBot y TargetBot ceden brevemente el walking durante Recovery."
     ],
     "files": files
 }

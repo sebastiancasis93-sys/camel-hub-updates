@@ -1,14 +1,14 @@
 {
   "product": "Camel Hub",
   "channel": "stable",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "updaterProtocol": "normalized-adler32-v2",
   "summary": [
-    "Restauración estable de Gampi: Guild Buff V23 mantiene el bridge probado hacia Auto Boost Guild / Auto Haste Guild.",
-    "Buffguild.lua queda protegido del updater porque Gampi usa una variante validada específica del personaje.",
-    "CamelGuildLegacyFix queda retirado/inactivo y fuera del updater.",
-    "In-Game Script Groups SAFE se mantiene: switches de macros dentro de su ventana, sin alterar macro() ni hotkeys.",
-    "Storage, perfiles, Cave/Target configs, iconos y Rescue/Summoner permanecen protegidos."
+    "ComboBot Follow Recovery V2: recupera follow corto cuando el leader desaparece en el mismo piso.",
+    "Mejora paso por puertas abiertas con direct-step cuando el tile ya es caminable.",
+    "Puede intentar use() en puertas cerradas conocidas y conserva recuperación de escaleras/cambios de piso.",
+    "Durante Recovery, CaveBot y TargetBot ceden brevemente el walking para evitar pelea de movimiento.",
+    "Storage, perfiles, spells/cooldowns por jugador, configs, Gampi Buffguild y Rescue/Summoner permanecen protegidos."
   ],
   "files": [
     {
@@ -203,9 +203,9 @@
     {
       "path": "cavebot/walking.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/walking.lua",
-      "normalizedSize": 5534,
-      "adler32": "e43fcd6b",
-      "sha256": "399e9f288ef666cb194078c9b6e97589f1ad690ff7bd98b4a36975254be6b421"
+      "normalizedSize": 6002,
+      "adler32": "ca546bb5",
+      "sha256": "33f09868c5a600bcc7738806b2fcf97121219c921b0727f7f061ca1c07f4ba7a"
     },
     {
       "path": "cavebot/withdraw.lua",
@@ -280,9 +280,9 @@
     {
       "path": "targetbot/walking.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/targetbot/walking.lua",
-      "normalizedSize": 1460,
-      "adler32": "1377e119",
-      "sha256": "068b4b9fcaa3262455162ac5cd182d6a5e8893793a0ad7b77baf0f9a3e3e239a"
+      "normalizedSize": 1707,
+      "adler32": "9e70360f",
+      "sha256": "cce0e8dff782133194dfd49237ea0a58e3852a4eb26cdb37ec76974859ab0e48"
     },
     {
       "path": "vBot/AttackBot.lua",
@@ -490,9 +490,9 @@
     {
       "path": "vBot/combo.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/combo.lua",
-      "normalizedSize": 21328,
-      "adler32": "d0c74534",
-      "sha256": "9040df445e462a0def2691ed014d0bd7e2a9ca8c6499b3d794d26b449b973304"
+      "normalizedSize": 29664,
+      "adler32": "dc78c557",
+      "sha256": "3683d551b0e7ed6bd6a59b60e84676876bd1880c364a79d4fe40ff1fce7e2226"
     },
     {
       "path": "vBot/combo.otui",
