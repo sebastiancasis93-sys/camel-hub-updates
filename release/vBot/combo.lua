@@ -358,10 +358,22 @@ end)
 
 
 -- ================================================================
--- Camel Hub Fast Follow EXP3
--- Normal terrain keeps the 50 ms Fast Follow from Core 1.0.5.
--- Floor changes are handled as exact transition actions.
+-- Camel Hub Combo Follow Recovery V2
+--
+-- Mantiene el Fast Follow actual (50 ms) cuando el leader está visible.
+-- Solo entra en Recovery cuando el leader desaparece.
+--
+-- Mejoras:
+--   1) Recovery en mismo piso usando última posición/dirección.
+--   2) Recuperación de escaleras/pisos conserva la lógica EXP3.
+--   3) Puertas abiertas: paso directo si el tile es caminable, aunque
+--      getPath no lo quiera usar por información de path/minimap.
+--   4) Puertas cerradas conocidas: intenta use y sigue al abrirse.
+--   5) Durante Recovery/transition reserva movimiento unos milisegundos
+--      para que CaveBot/TargetBot no peleen por el walk.
 -- ================================================================
+
+CamelComboFollow = CamelComboFollow or {}
 
 local toFollow
 local toFollowPos = {}
@@ -369,8 +381,11 @@ local lastFollowDir = nil
 local lastFollowWalk = 0
 local lastLeaderPos = nil
 local lastLeaderSeen = 0
+local lastLeaderMoveDir = nil
 local floorTransition = nil
 local lastTransitionUse = 0
+local lastDoorUse = 0
+local recoveryStarted = 0
 
 local FOLLOW_INTERVAL = 50
 local FOLLOW_REISSUE_MS = 80
@@ -378,6 +393,36 @@ local FOLLOW_TRANSITION_REISSUE_MS = 100
 local FOLLOW_MAX_DISTANCE = 20
 local FOLLOW_TRANSITION_TTL = 4000
 local FOLLOW_USE_COOLDOWN = 450
+local FOLLOW_DOOR_USE_COOLDOWN = 350
+
+-- Recovery is deliberately short. It should recover follow, not roam.
+local FOLLOW_RECOVERY_FAST_TTL = 2200
+local FOLLOW_RECOVERY_MAX_TTL = 6500
+local FOLLOW_RECOVERY_PROJECT_STEPS = 2
+
+-- Same closed-door IDs already used by Extras -> Auto Open Doors.
+local doorIds = {
+  [5007]=true, [8265]=true, [1629]=true, [1632]=true, [5129]=true,
+  [6252]=true, [6249]=true, [7715]=true, [7712]=true, [7714]=true,
+  [7719]=true, [6256]=true, [1669]=true, [1672]=true, [5125]=true,
+  [5115]=true, [5124]=true, [17701]=true, [17710]=true, [1642]=true,
+  [6260]=true, [5107]=true, [4912]=true, [6251]=true, [5291]=true,
+  [1683]=true, [1696]=true, [1692]=true, [5006]=true, [2179]=true,
+  [5116]=true, [11705]=true, [30772]=true, [30774]=true, [6248]=true,
+  [5735]=true, [5732]=true, [5120]=true, [23873]=true, [5736]=true,
+  [6264]=true, [5122]=true, [30049]=true, [30042]=true, [7727]=true
+}
+
+local dirOffsets = {
+  [North]     = { 0, -1},
+  [East]      = { 1,  0},
+  [South]     = { 0,  1},
+  [West]      = {-1,  0},
+  [NorthEast] = { 1, -1},
+  [SouthEast] = { 1,  1},
+  [SouthWest] = {-1,  1},
+  [NorthWest] = {-1, -1}
+}
 
 local function copyPos(p, z)
   if not p then return nil end
@@ -387,6 +432,97 @@ end
 local function cheb(a, b)
   if not a or not b then return 999 end
   return math.max(math.abs(a.x - b.x), math.abs(a.y - b.y))
+end
+
+local function sign(value)
+  if value > 0 then return 1 end
+  if value < 0 then return -1 end
+  return 0
+end
+
+local function dirFromDelta(dx, dy)
+  dx = sign(dx)
+  dy = sign(dy)
+
+  if dx == 0 and dy == -1 then return North end
+  if dx == 1 and dy == -1 then return NorthEast end
+  if dx == 1 and dy == 0 then return East end
+  if dx == 1 and dy == 1 then return SouthEast end
+  if dx == 0 and dy == 1 then return South end
+  if dx == -1 and dy == 1 then return SouthWest end
+  if dx == -1 and dy == 0 then return West end
+  if dx == -1 and dy == -1 then return NorthWest end
+
+  return nil
+end
+
+local function nextPosForDir(pos, dir)
+  local offset = dirOffsets[dir]
+  if not pos or not offset then return nil end
+
+  return {
+    x = pos.x + offset[1],
+    y = pos.y + offset[2],
+    z = pos.z
+  }
+end
+
+local function reserveMovement(ms, recovery)
+  CamelComboFollow.movementLockUntil = math.max(
+    CamelComboFollow.movementLockUntil or 0,
+    now + (ms or 180)
+  )
+
+  CamelComboFollow.recoveryActive = recovery == true
+end
+
+local function releaseRecovery()
+  recoveryStarted = 0
+  CamelComboFollow.recoveryActive = false
+end
+
+local function tileTopId(tile)
+  if not tile then return nil end
+
+  local thing = tile:getTopUseThing()
+  if not thing then return nil end
+
+  local ok, id = pcall(function()
+    return thing:getId()
+  end)
+
+  if ok then return id end
+  return nil
+end
+
+local function isKnownDoorTile(tile)
+  local id = tileTopId(tile)
+  return id and doorIds[id] == true
+end
+
+local function tryUseDoorTile(tile)
+  if not tile or now - lastDoorUse < FOLLOW_DOOR_USE_COOLDOWN then
+    return false
+  end
+
+  if not isKnownDoorTile(tile) then
+    return false
+  end
+
+  local thing = tile:getTopUseThing()
+  if not thing then return false end
+
+  local ok = pcall(function()
+    use(thing)
+  end)
+
+  if ok then
+    lastDoorUse = now
+    reserveMovement(220, true)
+    return true
+  end
+
+  return false
 end
 
 local function isStairPos(p)
@@ -490,17 +626,19 @@ local function resolveFollowName()
 end
 
 local function refreshFollowPosition(name)
-  if not name or name == "" then return end
+  if not name or name == "" then return false end
 
   local target = getCreatureByName(name)
-  if target then
-    local tpos = target:getPosition()
-    if tpos then
-      toFollowPos[tpos.z] = tpos
-      lastLeaderPos = copyPos(tpos)
-      lastLeaderSeen = now
-    end
-  end
+  if not target then return false end
+
+  local tpos = target:getPosition()
+  if not tpos then return false end
+
+  toFollowPos[tpos.z] = copyPos(tpos)
+  lastLeaderPos = copyPos(tpos)
+  lastLeaderSeen = now
+  releaseRecovery()
+  return true
 end
 
 local function issueFollowStep(dir, transitionMode)
@@ -529,6 +667,63 @@ local function issueFollowStep(dir, transitionMode)
   return true
 end
 
+-- This is the door fix:
+-- If the next tile is already walkable, step on it directly instead of
+-- depending on getPath. This is especially useful for OPEN doors.
+-- If it is a known closed door, use it and retry on the next tick.
+local function stepOrDoor(dir, transitionMode, strictDirect)
+  if dir == nil then return false end
+
+  local myPos = player:getPosition()
+  local nextPos = nextPosForDir(myPos, dir)
+  local tile = nextPos and g_map.getTile(nextPos) or nil
+
+  if tile then
+    local walkable = false
+    local okWalk, value = pcall(function()
+      return tile:isWalkable()
+    end)
+
+    if okWalk then walkable = value == true end
+
+    if walkable then
+      -- Let the server resolve a creature that just moved away.
+      return issueFollowStep(dir, transitionMode)
+    end
+
+    if tryUseDoorTile(tile) then
+      return true
+    end
+
+    if strictDirect then
+      return false
+    end
+  elseif strictDirect then
+    return false
+  end
+
+  return issueFollowStep(dir, transitionMode)
+end
+
+local function tryDirectCardinalStep(myPos, targetPos, transitionMode)
+  if not myPos or not targetPos or myPos.z ~= targetPos.z then
+    return false
+  end
+
+  local dx = targetPos.x - myPos.x
+  local dy = targetPos.y - myPos.y
+
+  -- Doorways are normally cardinal. Avoid diagonal corner cutting here.
+  if dx ~= 0 and dy ~= 0 then
+    return false
+  end
+
+  local dir = dirFromDelta(dx, dy)
+  if not dir then return false end
+
+  return stepOrDoor(dir, transitionMode, true)
+end
+
 local function tryUseTransition(entry)
   if not entry or now - lastTransitionUse < FOLLOW_USE_COOLDOWN then
     return false
@@ -546,6 +741,7 @@ local function tryUseTransition(entry)
 
   if ok then
     lastTransitionUse = now
+    reserveMovement(250, true)
     return true
   end
 
@@ -567,6 +763,101 @@ local function startFloorTransition(oldPos, newPos)
 
   toFollowPos[oldPos.z] = entry
   lastFollowDir = nil
+  reserveMovement(250, true)
+end
+
+local function projectedRecoveryTarget(basePos)
+  if not basePos or not lastLeaderMoveDir then
+    return copyPos(basePos)
+  end
+
+  local offset = dirOffsets[lastLeaderMoveDir]
+  if not offset then
+    return copyPos(basePos)
+  end
+
+  local best = copyPos(basePos)
+
+  for step = 1, FOLLOW_RECOVERY_PROJECT_STEPS do
+    local candidate = {
+      x = basePos.x + offset[1] * step,
+      y = basePos.y + offset[2] * step,
+      z = basePos.z
+    }
+
+    local tile = g_map.getTile(candidate)
+    if not tile then break end
+
+    local walkable = false
+    local okWalk, value = pcall(function()
+      return tile:isWalkable()
+    end)
+
+    if okWalk then walkable = value == true end
+
+    if walkable or isKnownDoorTile(tile) then
+      best = candidate
+    else
+      break
+    end
+  end
+
+  return best
+end
+
+local function runRecovery(myPos)
+  if not lastLeaderPos or myPos.z ~= lastLeaderPos.z then
+    return false
+  end
+
+  local lostFor = now - lastLeaderSeen
+  if lostFor > FOLLOW_RECOVERY_MAX_TTL then
+    releaseRecovery()
+    return false
+  end
+
+  if recoveryStarted == 0 then
+    recoveryStarted = now
+    lastFollowDir = nil
+  end
+
+  reserveMovement(220, true)
+
+  local recoveryTarget = copyPos(lastLeaderPos)
+
+  -- For the first ~2 seconds, continue 1-2 tiles in the direction the leader
+  -- was moving. This is what helps when the leader disappears through a door.
+  if lostFor <= FOLLOW_RECOVERY_FAST_TTL then
+    recoveryTarget = projectedRecoveryTarget(lastLeaderPos)
+  end
+
+  local dist = cheb(myPos, recoveryTarget)
+  if dist == 0 then
+    return true
+  end
+
+  -- First try a direct cardinal step. This bypasses stale path data on
+  -- already-open doors.
+  if tryDirectCardinalStep(myPos, recoveryTarget, true) then
+    return true
+  end
+
+  local path = getPath(myPos, recoveryTarget, FOLLOW_MAX_DISTANCE, {
+    ignoreNonPathable = true,
+    precision = 0,
+    ignoreStairs = false,
+    ignoreCreatures = true
+  })
+
+  if path and path[1] then
+    stepOrDoor(path[1], true, false)
+    return true
+  end
+
+  -- If pathfinder refuses but the last known position is cardinally reachable,
+  -- give the adjacent open-door tile one final direct chance.
+  tryDirectCardinalStep(myPos, lastLeaderPos, true)
+  return true
 end
 
 macro(FOLLOW_INTERVAL, function()
@@ -574,6 +865,7 @@ macro(FOLLOW_INTERVAL, function()
     toFollow = nil
     lastFollowDir = nil
     floorTransition = nil
+    releaseRecovery()
     return
   end
 
@@ -581,10 +873,11 @@ macro(FOLLOW_INTERVAL, function()
   if not toFollow then
     lastFollowDir = nil
     floorTransition = nil
+    releaseRecovery()
     return
   end
 
-  refreshFollowPosition(toFollow)
+  local leaderVisible = refreshFollowPosition(toFollow)
 
   local myPos = player:getPosition()
   if not myPos then return end
@@ -593,6 +886,7 @@ macro(FOLLOW_INTERVAL, function()
     if myPos.z ~= floorTransition.fromZ then
       floorTransition = nil
       lastFollowDir = nil
+      releaseRecovery()
     elseif now - floorTransition.started > FOLLOW_TRANSITION_TTL then
       floorTransition = nil
       lastFollowDir = nil
@@ -601,11 +895,17 @@ macro(FOLLOW_INTERVAL, function()
 
   -- Transition mode: reach the exact stair/ladder tile.
   if floorTransition and myPos.z == floorTransition.fromZ then
+    reserveMovement(250, true)
+
     local entry = floorTransition.entry
     local dist = cheb(myPos, entry)
 
     if dist == 0 then
       tryUseTransition(entry)
+      return
+    end
+
+    if tryDirectCardinalStep(myPos, entry, true) then
       return
     end
 
@@ -616,7 +916,7 @@ macro(FOLLOW_INTERVAL, function()
     })
 
     if path and path[1] then
-      issueFollowStep(path[1], true)
+      stepOrDoor(path[1], true, false)
       return
     end
 
@@ -626,13 +926,28 @@ macro(FOLLOW_INTERVAL, function()
     return
   end
 
-  -- Normal floor: same Fast Follow as Core 1.0.5.
+  -- Leader disappeared on the SAME floor:
+  -- use last position + movement direction for a short recovery.
+  if not leaderVisible then
+    if runRecovery(myPos) then
+      return
+    end
+    return
+  end
+
+  -- Normal visible leader = keep the current Fast Follow behavior.
   local p = toFollowPos[myPos.z]
   if not p then return end
 
   local dist = cheb(myPos, p)
   if dist <= 1 then
     lastFollowDir = nil
+    return
+  end
+
+  -- OPEN DOOR fast path: if leader is straight ahead and the next tile is
+  -- walkable, step directly even if pathfinder did not like the doorway.
+  if tryDirectCardinalStep(myPos, p, false) then
     return
   end
 
@@ -644,43 +959,54 @@ macro(FOLLOW_INTERVAL, function()
 
   if not path or not path[1] then return end
 
-  issueFollowStep(path[1], false)
+  stepOrDoor(path[1], false, false)
 end)
 
 onCreaturePositionChange(function(creature, oldPos, newPos)
   if not creature or not newPos or not toFollow then return end
   if creature:getName():lower() ~= tostring(toFollow):lower() then return end
 
-  toFollowPos[newPos.z] = newPos
+  toFollowPos[newPos.z] = copyPos(newPos)
   lastLeaderPos = copyPos(newPos)
   lastLeaderSeen = now
 
   if oldPos and oldPos.z ~= newPos.z then
     startFloorTransition(oldPos, newPos)
+  elseif oldPos and oldPos.z == newPos.z then
+    lastLeaderMoveDir = dirFromDelta(
+      newPos.x - oldPos.x,
+      newPos.y - oldPos.y
+    )
   end
 end)
 
--- Some OTC clients remove the leader from spectators before delivering
--- a complete cross-floor position event. If disappearance happens beside
--- a known stair, remember that stair as the old-floor transition tile.
+-- If the leader disappears:
+-- 1) stair nearby -> floor-transition recovery
+-- 2) otherwise -> same-floor Recovery V2 handles the last known direction
 onCreatureDisappear(function(creature)
   if not creature or not toFollow then return end
   if creature:getName():lower() ~= tostring(toFollow):lower() then return end
-  if not lastLeaderPos or now - lastLeaderSeen > 700 then return end
+  if not lastLeaderPos or now - lastLeaderSeen > 900 then return end
 
   local entry = findTransitionEntry(lastLeaderPos, nil)
   if entry and isStairPos(entry) then
     startFloorTransition(lastLeaderPos, nil)
+    return
+  end
+
+  if recoveryStarted == 0 then
+    recoveryStarted = now
   end
 end)
 
 onPlayerPositionChange(function(newPos, oldPos)
   if not newPos or not oldPos then return end
 
-  if floorTransition and oldPos.z ~= newPos.z then
+  if oldPos.z ~= newPos.z then
     floorTransition = nil
     lastFollowDir = nil
     lastFollowWalk = 0
+    releaseRecovery()
   end
 end)
 

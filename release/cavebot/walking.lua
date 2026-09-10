@@ -60,6 +60,13 @@ CaveBot.resetWalking = function()
 end
 
 CaveBot.doWalking = function()
+  -- During ComboBot recovery/transition, let ComboBot own movement briefly.
+  -- Returning true tells CaveBot that walking is still in progress.
+  if CamelComboFollow and (CamelComboFollow.movementLockUntil or 0) > now then
+    CaveBot.delay(50)
+    return true
+  end
+
   if CaveBot.Config.get("mapClick") then
     if isWalking and #expectedDirs > 0 then
       if playerAutoWalking() then
@@ -157,6 +164,12 @@ onPlayerPositionChange(function(newPos, oldPos)
 end)
 
 CaveBot.walkTo = function(dest, maxDist, params)
+  -- Same short movement reservation used by ComboBot Follow Recovery V2.
+  if CamelComboFollow and (CamelComboFollow.movementLockUntil or 0) > now then
+    CaveBot.delay(50)
+    return true
+  end
+
   local transition = params and params._transition == true
   local path = getPath(player:getPosition(), dest, maxDist, cleanPathParams(params))
 

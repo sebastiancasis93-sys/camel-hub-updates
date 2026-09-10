@@ -15,6 +15,12 @@ end
 TargetBot.walk = function()
   if not dest then return end
 
+  -- ComboBot Follow Recovery V2 can briefly reserve movement while it
+  -- recovers a lost leader / crosses a transition. Attacking still continues.
+  if CamelComboFollow and (CamelComboFollow.movementLockUntil or 0) > now then
+    return
+  end
+
   -- CaveBot can briefly reserve movement for doors/stairs/floor transitions.
   -- TargetBot still attacks; only its walking is paused.
   if CaveBot then
