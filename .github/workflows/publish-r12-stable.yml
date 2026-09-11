@@ -1,0 +1,82 @@
+name: Publish R12 stable metadata
+
+on:
+  push:
+    paths:
+      - '.github/workflows/publish-r12-stable.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Normalize stable manifest to R12
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json, re
+
+          root = Path('.')
+          manifest_path = root / 'manifest.json'
+          manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+          manifest['product'] = 'Camel Hub'
+          manifest['channel'] = 'stable'
+          manifest['version'] = '1.0.12'
+          manifest['updaterProtocol'] = 'normalized-adler32-v2'
+          manifest['summary'] = [
+              'R12 Silent Sync Anti-Mute confirmado estable.',
+              'Rescue System mantiene TRANSIT / SAFE_PZ / rearme de 5 segundos y 4 summoners dinámicos.',
+              'Athalar usa sincronización silenciosa: sin polling periódico ni ACKs cuando la revisión coincide.',
+              'Loader, storage, perfiles, CaveBot configs, TargetBot configs y archivos privados permanecen protegidos.'
+          ]
+          protected = {'_Loader.lua', 'vBot/ingame_editor.lua'}
+          manifest['files'] = [f for f in manifest.get('files', []) if f.get('path') not in protected]
+          manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          core_path = root / 'CORE_FILES.txt'
+          if core_path.exists():
+              lines = core_path.read_text(encoding='utf-8').splitlines()
+              lines = [x for x in lines if x.strip() not in protected]
+              core_path.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+
+          build_path = root / 'build_release.py'
+          if build_path.exists():
+              s = build_path.read_text(encoding='utf-8')
+              s = re.sub(r'VERSION = "[^"]+"', 'VERSION = "1.0.12"', s, count=1)
+              s = s.replace(
+                  'if rel in {"vBot/CamelHubUpdater.lua", "vBot/Buffguild.lua", "vBot/CamelGuildLegacyFix.lua"}:',
+                  'if rel in {"_Loader.lua", "vBot/ingame_editor.lua", "vBot/CamelHubUpdater.lua", "vBot/Buffguild.lua", "vBot/CamelGuildLegacyFix.lua"}:'
+              )
+              s = re.sub(
+                  r'"summary": \[.*?\]\n    ,?\n?    "files"',
+                  '"summary": [\n        "R12 Silent Sync Anti-Mute confirmado estable.",\n        "Rescue System R12 preservado fuera de los archivos privados administrados automáticamente.",\n        "Loader y configuraciones personales permanecen protegidos."\n    ],\n    "files"',
+                  s,
+                  flags=re.S
+              )
+              build_path.write_text(s, encoding='utf-8')
+
+          stable = root / 'R12_STABLE.txt'
+          stable.write_text(
+              'Camel Hub stable: 1.0.12 / Rescue System R12 Silent Sync Anti-Mute\n'
+              'RescueSystem.lua SHA-256: 5b9ee4d41d341b07c9ef05c7cd8c4efe598eaf1127a799fec7e5cf028240e4bb\n'
+              'Approved stable baseline: Safe Bot Actualizado 2.0 + R12.\n'
+              'Protected: loaders, storage, character profiles/configs, CaveBot configs, TargetBot configs, private macros.\n',
+              encoding='utf-8'
+          )
+          PY
+      - name: Commit stable 1.0.12
+        shell: bash
+        run: |
+          git config user.name 'camel-hub-release-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add manifest.json CORE_FILES.txt build_release.py R12_STABLE.txt
+          if git diff --cached --quiet; then
+            echo 'No changes to commit.'
+            exit 0
+          fi
+          git commit -m 'Publish Camel Hub 1.0.12 stable (R12)'
+          git push
