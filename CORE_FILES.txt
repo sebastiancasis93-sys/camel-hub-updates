@@ -1,4 +1,3 @@
-_Loader.lua
 cavebot/actions.lua
 cavebot/bank.lua
 cavebot/buy_supplies.lua
@@ -80,7 +79,6 @@ vBot/extrasPvp.otui
 vBot/friend_healer.lua
 vBot/friend_healer.otui
 vBot/hold_target.lua
-vBot/ingame_editor.lua
 vBot/ingame_editor.otui
 vBot/items.lua
 vBot/main.lua

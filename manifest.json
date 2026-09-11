@@ -1,23 +1,15 @@
 {
   "product": "Camel Hub",
   "channel": "stable",
-  "version": "1.0.10",
+  "version": "1.0.12",
   "updaterProtocol": "normalized-adler32-v2",
   "summary": [
-    "ComboBot Follow Recovery V2: recupera follow corto cuando el leader desaparece en el mismo piso.",
-    "Mejora paso por puertas abiertas con direct-step cuando el tile ya es caminable.",
-    "Puede intentar use() en puertas cerradas conocidas y conserva recuperación de escaleras/cambios de piso.",
-    "Durante Recovery, CaveBot y TargetBot ceden brevemente el walking para evitar pelea de movimiento.",
-    "Storage, perfiles, spells/cooldowns por jugador, configs, Gampi Buffguild y Rescue/Summoner permanecen protegidos."
+    "R12 Silent Sync Anti-Mute confirmado estable.",
+    "Rescue System mantiene TRANSIT / SAFE_PZ / rearme de 5 segundos y 4 summoners dinámicos.",
+    "Athalar usa sincronización silenciosa: sin polling periódico ni ACKs cuando la revisión coincide.",
+    "Loader, storage, perfiles, CaveBot configs, TargetBot configs y archivos privados permanecen protegidos."
   ],
   "files": [
-    {
-      "path": "_Loader.lua",
-      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/_Loader.lua",
-      "normalizedSize": 3200,
-      "adler32": "0cf60012",
-      "sha256": "350736b1021b1c494def2a8be57f0df741be831bdc27232ee0595e85b8d6a328"
-    },
     {
       "path": "cavebot/actions.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/actions.lua",
@@ -584,13 +576,6 @@
       "normalizedSize": 898,
       "adler32": "d6830daf",
       "sha256": "a4024f1b9eb382d327f5d7e0304bebc7cbda819bcb5549cb7000ec15199be914"
-    },
-    {
-      "path": "vBot/ingame_editor.lua",
-      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/ingame_editor.lua",
-      "normalizedSize": 6481,
-      "adler32": "8f1c4a5b",
-      "sha256": "fa86b882800f5cf44db9fdc40c1602db5a37a962e407d51e54c5b21be013305f"
     },
     {
       "path": "vBot/ingame_editor.otui",

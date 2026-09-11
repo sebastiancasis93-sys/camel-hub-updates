@@ -2,7 +2,7 @@
 from pathlib import Path
 import hashlib, json, sys, zlib
 
-VERSION = "1.0.10"
+VERSION = "1.0.12"
 ROOT = Path(__file__).resolve().parent
 RELEASE = ROOT / "release"
 CORE_LIST = ROOT / "CORE_FILES.txt"
@@ -23,7 +23,7 @@ allowed = [
 
 files = []
 for rel in allowed:
-    if rel in {"vBot/CamelHubUpdater.lua", "vBot/Buffguild.lua", "vBot/CamelGuildLegacyFix.lua"}:
+    if rel in {"_Loader.lua", "vBot/ingame_editor.lua", "vBot/CamelHubUpdater.lua", "vBot/Buffguild.lua", "vBot/CamelGuildLegacyFix.lua"}:
         continue
 
     p = RELEASE / rel

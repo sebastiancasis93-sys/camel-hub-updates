@@ -1,0 +1,4 @@
+Camel Hub stable: 1.0.12 / Rescue System R12 Silent Sync Anti-Mute
+RescueSystem.lua SHA-256: 5b9ee4d41d341b07c9ef05c7cd8c4efe598eaf1127a799fec7e5cf028240e4bb
+Approved stable baseline: Safe Bot Actualizado 2.0 + R12.
+Protected: loaders, storage, character profiles/configs, CaveBot configs, TargetBot configs, private macros.
