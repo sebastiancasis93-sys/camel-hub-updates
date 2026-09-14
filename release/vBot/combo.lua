@@ -329,14 +329,27 @@ onMissle(function(missle)
     end
     local c1 = fromCreatures[1]
     local t1 = toCreatures[1]
-    leaderTarget = t1
+
+    -- Only accept targets from the configured Shoot Leader.
+    -- This prevents missiles from other players from overwriting leaderTarget.
     if c1:getName():lower() == config.shootLeader:lower() then
+      leaderTarget = t1
+
+      -- Assist the leader immediately instead of waiting only for the 10 ms
+      -- recovery macro below. Keep the existing LEADER TARGET selector semantics.
+      if config.attackLeaderTargetEnabled and config.attack == "LEADER TARGET" then
+        local currentTarget = getTarget()
+        if not currentTarget or currentTarget:getId() ~= t1:getId() then
+          g_game.attack(t1)
+        end
+      end
+
       if config.attackItemEnabled and config.item and config.item > 100 and findItem(config.item) then
         useWith(config.item, t1)
       end
       if config.attackSpellEnabled and config.spell:len() > 1 then
         say(config.spell)
-      end 
+      end
     end
   end
 end)
@@ -344,7 +357,8 @@ end)
 macro(10, function()
   if not config.enabled or not config.attackLeaderTargetEnabled then return end
   if leaderTarget and config.attack == "LEADER TARGET" then
-    if not getTarget() or (getTarget() and getTarget():getName() ~= leaderTarget:getName()) then
+    local currentTarget = getTarget()
+    if not currentTarget or currentTarget:getId() ~= leaderTarget:getId() then
       g_game.attack(leaderTarget)
     end
   end

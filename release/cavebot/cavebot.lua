@@ -24,6 +24,20 @@ end
 local actionRetries = 0
 local prevActionResult = true
 
+-- Camel Hub Route Guard V1
+-- TargetBot/ComboBot may temporarily move the character away from the current
+-- CaveBot goto. Keep a short memory of that interference so a transient path
+-- failure cannot be mistaken for a bad waypoint and skipped.
+local ROUTE_INTERFERENCE_GUARD = 1600
+CaveBot._lastTargetInterferenceAt = CaveBot._lastTargetInterferenceAt or 0
+CaveBot._lastComboInterferenceAt = CaveBot._lastComboInterferenceAt or 0
+
+CaveBot.hadRecentMovementInterference = function(window)
+  local guard = window or ROUTE_INTERFERENCE_GUARD
+  return (CaveBot._lastTargetInterferenceAt or 0) + guard > now
+      or (CaveBot._lastComboInterferenceAt or 0) + guard > now
+end
+
 -- Camel Hub EXP3:
 -- Doors, ladders/stairs and exact precision-0 waypoints get a short
 -- movement-priority window. TargetBot can keep attacking, but its WALK
@@ -81,6 +95,23 @@ cavebotMacro = macro(20, function()
   local currentAction = ui.list:getFocusedChild()
   if not currentAction then
     currentAction = ui.list:getFirstChild()
+  end
+
+  -- Record movement ownership from the other systems even when TargetBot is
+  -- deliberately allowing CaveBot to walk for luring. This lets the current
+  -- goto survive the hand-off instead of being skipped after combat.
+  if TargetBot and TargetBot.isActive and TargetBot.isActive() then
+    CaveBot._lastTargetInterferenceAt = now
+  end
+  if CamelComboFollow and (CamelComboFollow.movementLockUntil or 0) > now then
+    CaveBot._lastComboInterferenceAt = now
+  end
+
+  -- A protected goto always gets a fresh retry budget after TargetBot/ComboBot
+  -- releases movement. Without this, retries accumulated during an interruption
+  -- could immediately trip skipBlocked/pathfinder on resume.
+  if currentAction.action == "goto" and CaveBot.hadRecentMovementInterference() then
+    actionRetries = 0
   end
 
   local criticalAction = isCriticalCaveAction(currentAction)
@@ -255,6 +286,15 @@ CaveBot.lastReachedLabel = function()
 end
 
 CaveBot.gotoNextWaypointInRange = function()
+  -- Never reroute the CaveBot while combat/follow movement has just displaced
+  -- the character. The current goto must be retried first.
+  if CaveBot.hadRecentMovementInterference and CaveBot.hadRecentMovementInterference() then
+    return false
+  end
+  if TargetBot and TargetBot.isActive and TargetBot.isActive() then
+    return false
+  end
+
   local currentAction = ui.list:getFocusedChild()
   local index = ui.list:getChildIndex(currentAction)
   local actions = ui.list:getChildren()
@@ -411,7 +451,7 @@ CaveBot.getPreviousLabel = function()
 
   local index = ui.list:getChildIndex(currentAction)
 
-  -- if not index then something went wrong and there's no selected child
+  --if not index then something went wrong and there's no selected child
   if not index then return false end
 
   for i=1,#actions do
@@ -437,7 +477,7 @@ CaveBot.getNextLabel = function()
   local currentAction = ui.list:getFocusedChild() or ui.list:getFirstChild()
   local index = ui.list:getChildIndex(currentAction)
 
-  -- if not index then something went wrong
+  --if not index then something went wrong
   if not index then return false end
 
   for i=1,#actions do

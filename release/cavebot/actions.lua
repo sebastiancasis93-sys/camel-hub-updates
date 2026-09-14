@@ -5,6 +5,21 @@ local nextTile = nil
 
 local noPath = 0
 
+-- Camel Hub Route Guard V1
+-- If TargetBot/ComboBot recently owned movement, a temporary no-path/blocked
+-- result must retry the SAME goto instead of advancing to another waypoint.
+local function recentMovementInterference()
+  return CaveBot.hadRecentMovementInterference
+      and CaveBot.hadRecentMovementInterference(1600)
+end
+
+local function holdGotoAfterInterference(delayMs)
+  if not recentMovementInterference() then return false end
+  noPath = 0
+  CaveBot.delay(delayMs or 120)
+  return true
+end
+
 -- antistuck f()
 local nextPos = nil -- creature
 local nextPosF = nil -- furniture
@@ -120,6 +135,14 @@ end
 local function pathfinder()
   if not storage.extras.pathfinding then return end
   if noPath < 10 then return end
+
+  -- Do not choose a different waypoint because combat/follow just moved us.
+  -- Reset the anti-stuck counter and let the current goto get a clean retry.
+  if recentMovementInterference()
+      or (TargetBot and TargetBot.isActive and TargetBot.isActive()) then
+    noPath = 0
+    return false
+  end
 
   if not CaveBot.gotoNextWaypointInRange() then
     if getConfigFromName and getConfigFromName() then
@@ -290,12 +313,14 @@ CaveBot.registerAction("goto", "green", function(value, retries, prev)
   
   if CaveBot.Config.get("mapClick") then
     if retries >= 5 then
+      if holdGotoAfterInterference(120) then return "retry" end
       noPath = noPath + 1
       pathfinder()
       return false -- tried 5 times, can't get there
     end
   else
     if retries >= 100 then
+      if holdGotoAfterInterference(120) then return "retry" end
       noPath = noPath + 1
       pathfinder()
       return false -- tried 100 times, can't get there
@@ -314,6 +339,7 @@ CaveBot.registerAction("goto", "green", function(value, retries, prev)
   local maxDist = storage.extras.gotoMaxDistance or 40
   
   if math.abs(pos.x-playerPos.x) + math.abs(pos.y-playerPos.y) > maxDist then
+    if holdGotoAfterInterference(150) then return "retry" end
     noPath = noPath + 1
     pathfinder()
     return false -- too far way
@@ -354,6 +380,7 @@ CaveBot.registerAction("goto", "green", function(value, retries, prev)
   -- check if there's a path to that place, ignore creatures and fields
   local path = findPath(playerPos, pos, maxDist, { ignoreNonPathable = true, precision = 1, ignoreCreatures = true, allowUnseen = true, allowOnlyVisibleTiles = false  })
   if not path then
+    if holdGotoAfterInterference(150) then return "retry" end
     if breakFurniture(pos, storage.extras.machete) then
       CaveBot.delay(1000)
       retries = 0
@@ -403,6 +430,7 @@ CaveBot.registerAction("goto", "green", function(value, retries, prev)
 
     if not foundMonster then
       foundMonster = false
+      if holdGotoAfterInterference(150) then return "retry" end
       return false -- no other way
     end
   end
@@ -424,12 +452,14 @@ CaveBot.registerAction("goto", "green", function(value, retries, prev)
   end
   
   if not CaveBot.Config.get("mapClick") and retries >= 5 then
+    if holdGotoAfterInterference(120) then return "retry" end
     noPath = noPath + 1
     pathfinder()
     return false
   end
   
   if CaveBot.Config.get("skipBlocked") then
+    if holdGotoAfterInterference(150) then return "retry" end
     noPath = noPath + 1
     pathfinder()
     return false

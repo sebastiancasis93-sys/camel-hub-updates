@@ -19,11 +19,24 @@ AthalarIconEditorRow < Panel
     text: Icon
 
   SpinBox
-    id: x
+    id: image
     anchors.left: name.right
     anchors.verticalCenter: parent.verticalCenter
     margin-left: 4
-    width: 62
+    width: 72
+    height: 20
+    minimum: 1
+    maximum: 65535
+    step: 1
+    editable: true
+    tooltip: Display Item ID only; does not change the macro action
+
+  SpinBox
+    id: x
+    anchors.left: image.right
+    anchors.verticalCenter: parent.verticalCenter
+    margin-left: 4
+    width: 58
     height: 20
     minimum: 0
     maximum: 2500
@@ -35,7 +48,7 @@ AthalarIconEditorRow < Panel
     anchors.left: x.right
     anchors.verticalCenter: parent.verticalCenter
     margin-left: 4
-    width: 62
+    width: 58
     height: 20
     minimum: 0
     maximum: 2500
@@ -52,8 +65,8 @@ AthalarIconEditorRow < Panel
     text: Apply
 
 AthalarIconEditorWindow < MainWindow
-  !text: tr('Icon Editor')
-  size: 380 340
+  !text: tr('Camel Icon Editor')
+  size: 455 380
   @onEscape: self:hide()
 
   Label
@@ -61,11 +74,11 @@ AthalarIconEditorWindow < MainWindow
     anchors.left: parent.left
     anchors.right: parent.right
     anchors.top: parent.top
-    height: 30
+    height: 32
     text-align: center
     font: verdana-11px-rounded
     color: #9dd1ce
-    text: Move icons or edit X / Y, then Save Current
+    text: Image changes display only. Functional item IDs stay untouched.
 
   Label
     id: headers
@@ -74,7 +87,7 @@ AthalarIconEditorWindow < MainWindow
     anchors.top: help.bottom
     height: 18
     font: verdana-11px-rounded
-    text: Show  Name                         X          Y
+    text: Show  Name                    Image ID        X        Y
 
   ScrollablePanel
     id: list
