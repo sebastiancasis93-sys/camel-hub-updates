@@ -3,7 +3,7 @@ from pathlib import Path
 import hashlib, json, sys, zlib
 
 VERSION = "1.0.13"
-CHANNEL = "test"
+CHANNEL = "stable"
 ROOT = Path(__file__).resolve().parent
 RELEASE = ROOT / "release"
 CORE_LIST = ROOT / "CORE_FILES.txt"
@@ -26,7 +26,7 @@ files = []
 for rel in allowed:
     p = RELEASE / rel
     if not p.is_file():
-        raise SystemExit(f"Falta archivo del test core: {rel}")
+        raise SystemExit(f"Falta archivo del core: {rel}")
 
     data = p.read_bytes()
     text = data.decode("utf-8").replace("\r\n", "\n").replace("\r", "\n")
@@ -46,10 +46,10 @@ manifest = {
     "version": VERSION,
     "updaterProtocol": "normalized-adler32-v2",
     "summary": [
-        "TEST: ComboBot Assist Target copia el target real del leader antes del ataque configurado.",
-        "27 iconos universales con Energy Bomb 3149 e Image ID visual editable.",
-        "Route Guard protege el goto actual frente a interrupciones de TargetBot/ComboBot.",
-        "Recoge Todo de Sabuezo reemplaza Camel Auto Party."
+        "ComboBot Assist Target estable.",
+        "27 iconos universales editables con Energy Bomb 3149.",
+        "CaveBot Route Guard reduce skips por interferencias de TargetBot/ComboBot.",
+        "Recoge Todo reemplaza Camel Auto Party."
     ],
     "files": files
 }
