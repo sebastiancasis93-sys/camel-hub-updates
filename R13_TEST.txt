@@ -1,0 +1,12 @@
+Camel Hub TEST: 1.0.13
+Base: Safe bot 12-09 + ComboBot Assist Target + Icon27 + Route Guard + Recoge Todo.
+
+Cambios incluidos:
+- ComboBot: followers targetean el mismo creature del leader y luego ejecutan su ataque configurado.
+- Iconos: catalogo universal de 27 iconos; Energy Bomb funcional usa item 3149.
+- Icon Editor: Image ID es solo visual; no altera IDs funcionales de macros/items.
+- CaveBot Route Guard: reduce skips de goto causados por interrupciones recientes de TargetBot/ComboBot.
+- Recoge Todo: reemplaza Camel Auto Party; barrido 3x3 configurable basado en Sabuezo.
+
+Main estable permanece en 1.0.12 hasta aprobacion en juego.
+_Loader.lua y CamelHubUpdater.lua se publican en release para el build TEST completo, pero no forman parte del manifest auto-gestionado.
