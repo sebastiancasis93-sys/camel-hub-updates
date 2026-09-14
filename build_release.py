@@ -2,7 +2,8 @@
 from pathlib import Path
 import hashlib, json, sys, zlib
 
-VERSION = "1.0.12"
+VERSION = "1.0.13"
+CHANNEL = "test"
 ROOT = Path(__file__).resolve().parent
 RELEASE = ROOT / "release"
 CORE_LIST = ROOT / "CORE_FILES.txt"
@@ -23,12 +24,9 @@ allowed = [
 
 files = []
 for rel in allowed:
-    if rel in {"_Loader.lua", "vBot/ingame_editor.lua", "vBot/CamelHubUpdater.lua", "vBot/Buffguild.lua", "vBot/CamelGuildLegacyFix.lua"}:
-        continue
-
     p = RELEASE / rel
     if not p.is_file():
-        raise SystemExit(f"Falta archivo del core: {rel}")
+        raise SystemExit(f"Falta archivo del test core: {rel}")
 
     data = p.read_bytes()
     text = data.decode("utf-8").replace("\r\n", "\n").replace("\r", "\n")
@@ -44,13 +42,14 @@ for rel in allowed:
 
 manifest = {
     "product": "Camel Hub",
-    "channel": "stable",
+    "channel": CHANNEL,
     "version": VERSION,
     "updaterProtocol": "normalized-adler32-v2",
     "summary": [
-        "ComboBot Follow Recovery V2 con recuperación corta del leader.",
-        "Mejora puertas abiertas/cerradas sin tocar datos privados por jugador.",
-        "CaveBot y TargetBot ceden brevemente el walking durante Recovery."
+        "TEST: ComboBot Assist Target copia el target real del leader antes del ataque configurado.",
+        "27 iconos universales con Energy Bomb 3149 e Image ID visual editable.",
+        "Route Guard protege el goto actual frente a interrupciones de TargetBot/ComboBot.",
+        "Recoge Todo de Sabuezo reemplaza Camel Auto Party."
     ],
     "files": files
 }
@@ -59,5 +58,4 @@ manifest = {
     json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",
     encoding="utf-8"
 )
-
-print(f"Core {VERSION}: {len(files)} archivos")
+print(f"Camel Hub {VERSION} {CHANNEL}: {len(files)} archivos")
