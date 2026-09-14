@@ -1,10 +1,10 @@
 {
   "product": "Camel Hub",
-  "channel": "test",
+  "channel": "stable",
   "version": "1.0.13",
   "updaterProtocol": "normalized-adler32-v2",
   "summary": [
-    "TEST: ComboBot Assist Target copia el target real del leader antes del ataque configurado.",
+    "ComboBot Assist Target copia el target real del leader antes del ataque configurado.",
     "27 iconos universales con Energy Bomb 3149 e Image ID visual editable.",
     "Route Guard protege el goto actual frente a interrupciones de TargetBot/ComboBot.",
     "Recoge Todo de Sabuezo reemplaza Camel Auto Party."
@@ -12,56 +12,56 @@
   "files": [
     {
       "path": "cavebot/actions.lua",
-      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/test/1.0.13/release/cavebot/actions.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/actions.lua",
       "normalizedSize": 17126,
       "adler32": "c49623d2",
       "sha256": "df20d2594027a37476d87214d20c2b75848a0c6a05b3e73412eff87074a8fbfb"
     },
     {
       "path": "cavebot/cavebot.lua",
-      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/test/1.0.13/release/cavebot/cavebot.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/cavebot.lua",
       "normalizedSize": 15678,
       "adler32": "e6e6becd",
       "sha256": "1e314ad4fd9ab1ecc12abe23128fbb8a1f9f39c6d1a8da287bc84fbfb8f0676b"
     },
     {
       "path": "vBot/AthalarIcons.lua",
-      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/test/1.0.13/release/vBot/AthalarIcons.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/AthalarIcons.lua",
       "normalizedSize": 8228,
       "adler32": "fbb04b9a",
       "sha256": "a912a5e791e8cc611f2fe30de7a6cc85395063c4cc9ece7a8ff4efd3a0ea0d3d"
     },
     {
       "path": "vBot/FireBomb.lua",
-      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/test/1.0.13/release/vBot/FireBomb.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/FireBomb.lua",
       "normalizedSize": 1866,
       "adler32": "33696d14",
       "sha256": "b9e57f7eadf4dde1cb7327c16f5fc8ddfc273d697e6b9e6ccbef226febcae0ef"
     },
     {
       "path": "vBot/IconEditor.lua",
-      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/test/1.0.13/release/vBot/IconEditor.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/IconEditor.lua",
       "normalizedSize": 6969,
       "adler32": "861e1b09",
       "sha256": "03bc6dfabf91fb4fc6e54adb11bea584bfe008b62b0a4628405a938b9997ca52"
     },
     {
       "path": "vBot/IconEditor.otui",
-      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/test/1.0.13/release/vBot/IconEditor.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/IconEditor.otui",
       "normalizedSize": 3037,
       "adler32": "f730b12b",
       "sha256": "c1e9e386527fd2da64f3961341aa4d1951ce9bcf3dc9f2af1d5cfecdf67251aa"
     },
     {
       "path": "vBot/Recoge.lua",
-      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/test/1.0.13/release/vBot/Recoge.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/Recoge.lua",
       "normalizedSize": 2959,
       "adler32": "8f70b0b0",
       "sha256": "ac81b459f5d84ea23602274917837bdd10f25a322bffc3683411ffc8f69e40cd"
     },
     {
       "path": "vBot/combo.lua",
-      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/test/1.0.13/release/vBot/combo.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/combo.lua",
       "normalizedSize": 30238,
       "adler32": "c3797f50",
       "sha256": "89d73d9d326c656b30fc1c425123c3f075556fe471ebdf9f6a4045eaeecc524e"
