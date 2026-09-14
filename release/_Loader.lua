@@ -98,12 +98,15 @@ local luaFiles = {
   "combo",
   "AttackBot",
   "pvp_support",
+
+  -- Dedicated Tools section directly above Dropper.
+  "RescueSystem",
   "Dropper",
   "Containers",
   "quiver_manager",
   "quiver_label",
   "ZoomMap",
-  "zFreeScripts/z_Auto-Party",
+  "Recoge",
   "tools",
   "exeta",
   "spy_level",
