@@ -1,15 +1,22 @@
 {
   "product": "Camel Hub",
   "channel": "stable",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "updaterProtocol": "normalized-adler32-v2",
   "summary": [
-    "ComboBot Assist Target copia el target real del leader antes del ataque configurado.",
-    "27 iconos universales con Energy Bomb 3149 e Image ID visual editable.",
-    "Route Guard protege el goto actual frente a interrupciones de TargetBot/ComboBot.",
-    "Recoge Todo de Sabuezo reemplaza Camel Auto Party."
+    "Guild Sync integra la guild actual como Friends y Godslayers/Walkers como Enemies + Blacklist.",
+    "Rescue System reduce trafico de PM: SOS repetido a 20s, sync completo espaciado y cambios pequenos por delta.",
+    "CamelSlowPM serializa mensajes no urgentes para reducir bursts y riesgo de penalizacion de speed.",
+    "Player List FIX1 corrige el error table.insert causado por trim/gsub y mantiene CaveBot, TargetBot y HP cargando normalmente."
   ],
   "files": [
+    {
+      "path": "_Loader.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/_Loader.lua",
+      "normalizedSize": 3633,
+      "adler32": "000b9334",
+      "sha256": "206014f8ee16f7c8dba9c65a658613d9952d389e8875145c434fe500050cc89f"
+    },
     {
       "path": "cavebot/actions.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/actions.lua",
@@ -30,6 +37,13 @@
       "normalizedSize": 8228,
       "adler32": "fbb04b9a",
       "sha256": "a912a5e791e8cc611f2fe30de7a6cc85395063c4cc9ece7a8ff4efd3a0ea0d3d"
+    },
+    {
+      "path": "vBot/CamelSlowPM.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/CamelSlowPM.lua",
+      "normalizedSize": 3977,
+      "adler32": "9d970afe",
+      "sha256": "f09d59de78f4f07a289e408e90767b13923476ac8b79d3bc44e34b74dd2d80e7"
     },
     {
       "path": "vBot/FireBomb.lua",
@@ -60,11 +74,32 @@
       "sha256": "ac81b459f5d84ea23602274917837bdd10f25a322bffc3683411ffc8f69e40cd"
     },
     {
+      "path": "vBot/RescueSystem.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/RescueSystem.lua",
+      "normalizedSize": 69503,
+      "adler32": "144781ec",
+      "sha256": "7802ec370c2b0490f93ba43398a38f01beb66be7408b0a615c742cfa13bf8ad3"
+    },
+    {
       "path": "vBot/combo.lua",
       "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/combo.lua",
       "normalizedSize": 30238,
       "adler32": "c3797f50",
       "sha256": "89d73d9d326c656b30fc1c425123c3f075556fe471ebdf9f6a4045eaeecc524e"
+    },
+    {
+      "path": "vBot/playerlist.lua",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/playerlist.lua",
+      "normalizedSize": 39281,
+      "adler32": "3df654dc",
+      "sha256": "e3c63aec66d96a1a9940b9c438d2ef47ff1fb63a434bcccf8f0ba220917768d2"
+    },
+    {
+      "path": "vBot/playerlist.otui",
+      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/vBot/playerlist.otui",
+      "normalizedSize": 3981,
+      "adler32": "97b7f308",
+      "sha256": "0c8bc526840f4d18edadf6ff197cfc4f82608a493aee26cf99aa1ddd324c05cf"
     }
   ]
 }
