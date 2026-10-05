@@ -1,0 +1,192 @@
+name: Publish R14 stable
+
+on:
+  push:
+    paths:
+      - '.github/workflows/publish-r14-stable.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reconstruct validated R14 files
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p release/vBot
+
+          gzip -dc .r14_payload/loader.gz > release/_Loader.lua
+          gzip -dc .r14_payload/playerlist.gz > release/vBot/playerlist.lua
+          gzip -dc .r14_payload/playerlist.otui.gz > release/vBot/playerlist.otui
+          gzip -dc .r14_payload/slowpm.gz > release/vBot/CamelSlowPM.lua
+          cat .r14_payload/rescue.part1 .r14_payload/rescue.part2 .r14_payload/rescue.part3 | base64 -d | gzip -dc > release/vBot/RescueSystem.lua
+
+          cat > /tmp/r14.sha256 <<'EOF'
+          e196ab4111a7614595fde50d4be0c1ba2763adccfee2e0f7a7bc686c81bbe293  release/_Loader.lua
+          7802ec370c2b0490f93ba43398a38f01beb66be7408b0a615c742cfa13bf8ad3  release/vBot/RescueSystem.lua
+          e3c63aec66d96a1a9940b9c438d2ef47ff1fb63a434bcccf8f0ba220917768d2  release/vBot/playerlist.lua
+          0c8bc526840f4d18edadf6ff197cfc4f82608a493aee26cf99aa1ddd324c05cf  release/vBot/playerlist.otui
+          f09d59de78f4f07a289e408e90767b13923476ac8b79d3bc44e34b74dd2d80e7  release/vBot/CamelSlowPM.lua
+          EOF
+          sha256sum -c /tmp/r14.sha256
+
+      - name: Upgrade updater bootstrap
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import zlib
+
+          p = Path('release/vBot/CamelHubUpdater.lua')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace('SAFE bootstrap v1.0.8', 'SAFE bootstrap v1.0.9')
+          s = s.replace('CamelHubUpdater.clientVersion = "1.0.8-safe"', 'CamelHubUpdater.clientVersion = "1.0.9-safe"')
+
+          if '["vBot/CamelSlowPM.lua"] = true,' not in s:
+              s = s.replace(
+                  '  ["vBot/CamelCommonMacros.lua"] = true,',
+                  '  ["vBot/CamelCommonMacros.lua"] = true,\n  ["vBot/CamelSlowPM.lua"] = true,'
+              )
+
+          if '["vBot/RescueSystem.lua"] = true,' not in s:
+              s = s.replace(
+                  '  ["vBot/pvp_support.lua"] = true,',
+                  '  ["vBot/pvp_support.lua"] = true,\n  ["vBot/RescueSystem.lua"] = true,'
+              )
+
+          p.write_text(s, encoding='utf-8', newline='\n')
+          norm = s.replace('\r\n', '\n').replace('\r', '\n').encode('utf-8')
+          assert len(norm) == 13141, len(norm)
+          assert f"{zlib.adler32(norm) & 0xffffffff:08x}" == '5adcb786'
+          PY
+
+      - name: Build stable 1.0.14 manifest and metadata
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib, json, re, zlib
+
+          root = Path('.')
+          manifest_path = root / 'manifest.json'
+          manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+
+          managed = [
+              '_Loader.lua',
+              'vBot/CamelSlowPM.lua',
+              'vBot/RescueSystem.lua',
+              'vBot/playerlist.lua',
+              'vBot/playerlist.otui',
+          ]
+          managed_set = set(managed)
+          old_files = [f for f in manifest.get('files', []) if f.get('path') not in managed_set]
+
+          def entry(rel):
+              p = root / 'release' / rel
+              data = p.read_bytes()
+              text = data.decode('utf-8').replace('\r\n', '\n').replace('\r', '\n')
+              norm = text.encode('utf-8')
+              return {
+                  'path': rel,
+                  'url': f'https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/{rel}',
+                  'normalizedSize': len(norm),
+                  'adler32': f'{zlib.adler32(norm) & 0xffffffff:08x}',
+                  'sha256': hashlib.sha256(data).hexdigest(),
+              }
+
+          manifest['product'] = 'Camel Hub'
+          manifest['channel'] = 'stable'
+          manifest['version'] = '1.0.14'
+          manifest['updaterProtocol'] = 'normalized-adler32-v2'
+          manifest['summary'] = [
+              'Guild Sync integrado en Player List: guild actual a Friends y reglas de guild enemiga a Enemies + Blacklist.',
+              'Rescue System R13 Low Traffic: full sync 12 s, cambios/config 15 s y repeticion SOS 20 s.',
+              'Cambios de estado y Enemy List usan mensajes compactos/delta para reducir PM generados por macros.',
+              'FIX1 de playerlist/Rescue corrige trim() y evita el error table.insert number expected.',
+              'Bootstrap 1.0.14 migra clientes 1.0.13 sin tocar storage, rutas ni perfiles personales.'
+          ]
+          manifest['files'] = old_files + [entry(x) for x in managed]
+          manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          build_path = root / 'build_release.py'
+          if build_path.exists():
+              s = build_path.read_text(encoding='utf-8')
+              s = re.sub(r'^VERSION = "[^"]+"', 'VERSION = "1.0.14"', s, count=1, flags=re.M)
+              s = re.sub(
+                  r'(?s)"summary": \[.*?\],\n    "files": files',
+                  '"summary": [\n'
+                  '        "Guild Sync integrado en Player List.",\n'
+                  '        "Rescue System R13 Low Traffic reduce trafico de PM.",\n'
+                  '        "FIX1 de trim() validado en juego.",\n'
+                  '        "Bootstrap compatible desde 1.0.13."\n'
+                  '    ],\n    "files": files',
+                  s,
+                  count=1
+              )
+              build_path.write_text(s, encoding='utf-8')
+
+          protected = root / 'PROTECTED_FILES.txt'
+          if protected.exists():
+              txt = protected.read_text(encoding='utf-8')
+              txt = '\n'.join(line for line in txt.splitlines() if line.strip() != '_Loader.lua') + '\n'
+              txt = txt.replace('- macros/rescate/personaje', '- macros privados por personaje')
+              note = (
+                  '\nDesde Camel Hub 1.0.14 son common-managed:\n'
+                  '_Loader.lua\n'
+                  'vBot/CamelSlowPM.lua\n'
+                  'vBot/RescueSystem.lua\n'
+                  'vBot/playerlist.lua\n'
+                  'vBot/playerlist.otui\n'
+                  'CamelGuildSync.cfg permanece local y nunca se publica desde el manifest.\n'
+              )
+              if 'Desde Camel Hub 1.0.14 son common-managed:' not in txt:
+                  txt += note
+              protected.write_text(txt, encoding='utf-8')
+
+          (root / 'R14_STABLE.txt').write_text(
+              'Camel Hub STABLE: 1.0.14\n'
+              'Base validada en juego: GuildSync + Rescue R13 Low Traffic FIX1.\n\n'
+              'Incluye:\n'
+              '- Guild Sync en Player List.\n'
+              '- Guild actual del personaje -> Friends.\n'
+              '- Godslayers y Walkers como reglas iniciales -> Enemies + Blacklist.\n'
+              '- Guild members se obtienen por HTTP; no se distribuyen masivamente por PM.\n'
+              '- Rescue R13 Low Traffic: 12 s full-sync frame, 15 s config/delta, 20 s SOS repeat.\n'
+              '- Estado ON/OFF y cambios pequeños usan mensajes compactos/delta.\n'
+              '- PlayerList/Rescue FIX1 corrige retorno multiple de gsub()/trim().\n'
+              '- Migracion 1.0.13 -> 1.0.14 mediante loader bootstrap verificado.\n\n'
+              'No administra storage, vBot_configs, cavebot_configs, targetbot_configs ni CamelGuildSync.cfg.\n',
+              encoding='utf-8'
+          )
+
+          expected = {
+              '_Loader.lua': ('7324', '0a2227b2', 'e196ab4111a7614595fde50d4be0c1ba2763adccfee2e0f7a7bc686c81bbe293'),
+              'vBot/RescueSystem.lua': ('69503', '144781ec', '7802ec370c2b0490f93ba43398a38f01beb66be7408b0a615c742cfa13bf8ad3'),
+              'vBot/playerlist.lua': ('39281', '3df654dc', 'e3c63aec66d96a1a9940b9c438d2ef47ff1fb63a434bcccf8f0ba220917768d2'),
+              'vBot/playerlist.otui': ('3981', '97b7f308', '0c8bc526840f4d18edadf6ff197cfc4f82608a493aee26cf99aa1ddd324c05cf'),
+              'vBot/CamelSlowPM.lua': ('3977', '9d970afe', 'f09d59de78f4f07a289e408e90767b13923476ac8b79d3bc44e34b74dd2d80e7'),
+          }
+          by_path = {x['path']: x for x in manifest['files']}
+          for rel, (size, adler, sha) in expected.items():
+              e = by_path[rel]
+              assert str(e['normalizedSize']) == size
+              assert e['adler32'] == adler
+              assert e['sha256'] == sha
+          assert manifest['version'] == '1.0.14'
+          PY
+
+      - name: Commit Camel Hub 1.0.14 stable
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'camel-hub-release-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git rm -r .r14_payload
+          git add release/_Loader.lua release/vBot/CamelHubUpdater.lua release/vBot/CamelSlowPM.lua release/vBot/RescueSystem.lua release/vBot/playerlist.lua release/vBot/playerlist.otui manifest.json build_release.py PROTECTED_FILES.txt R14_STABLE.txt
+          git commit -m 'Publish Camel Hub 1.0.14 stable'
+          git push
