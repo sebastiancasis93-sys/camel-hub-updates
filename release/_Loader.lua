@@ -32,6 +32,14 @@ for _, file in ipairs(bootstrapFiles) do
   loadScript(file)
 end
 
+-- Optional low-traffic PM queue. Old 1.0.13 updaters cannot download new
+-- whitelist paths, so RescueSystem also contains a safe internal fallback.
+-- Load the shared queue when it is already present (new installs / patched clients).
+local slowPmPath = "/bot/" .. configName .. "/vBot/CamelSlowPM.lua"
+if g_resources.fileExists(slowPmPath) then
+  loadScript("CamelSlowPM")
+end
+
 -- ================================================================
 -- MAIN - requested visual order
 -- 1. Banner
