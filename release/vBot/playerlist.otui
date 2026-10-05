@@ -60,13 +60,62 @@ Settings < FlatPanel
     id: AutoAdd
     text: Automatically add killed players while cave botting to blacklist.
 
+  HorizontalSeparator
+    margin-top: 6
+
+  Label
+    text: Guild Sync - Pazzur
+    text-align: center
+    font: verdana-11px-rounded
+
+  SettingCheckBox
+    id: GuildSyncEnabled
+    text: Auto sync every 30 minutes.
+
+  Label
+    id: GuildOwn
+    text: Your Guild: detecting...
+    text-wrap: true
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    margin-top: 3
+
+  Label
+    id: GuildStatus
+    text: Status: Waiting
+    text-wrap: true
+    text-auto-resize: true
+    font: verdana-11px-rounded
+    margin-top: 2
+
+  Button
+    id: GuildSyncNow
+    text: Sync Now
+    height: 22
+    margin-top: 5
+    font: verdana-11px-rounded
+
+  Button
+    id: GuildEnemyGuilds
+    text: Enemy Guilds (2)
+    height: 22
+    margin-top: 3
+    font: verdana-11px-rounded
+
+  Button
+    id: GuildAllyGuilds
+    text: Ally Guilds (0)
+    height: 22
+    margin-top: 3
+    font: verdana-11px-rounded
+
 tPanel < Panel
   margin: 3
   padding: 3
 
   TextList
     id: list
-    height: 200
+    height: 300
     anchors.left: parent.left
     anchors.right: parent.right
     anchors.top: parent.top
@@ -98,20 +147,20 @@ tPanel < Panel
 
 PlayerListWindow < MainWindow
   !text: tr('Player List')
-  size: 405 356
+  size: 465 505
   @onEscape: self:hide()
 
   TabBar
     id: tmpTabBar
     anchors.top: parent.top
     anchors.left: parent.left
-    width: 180
+    width: 205
 
   FlatPanel
     id: tmpTabContent
     anchors.top: tmpTabBar.bottom
     anchors.left: parent.left
-    width: 180
+    width: 205
     anchors.bottom: separator.top
     margin-bottom: 5
 
@@ -120,14 +169,15 @@ PlayerListWindow < MainWindow
     anchors.top: parent.top
     anchors.bottom: separator.top
     margin-bottom: 5
-    anchors.horizontalCenter: parent.horizontalCenter
+    anchors.left: tmpTabContent.right
+    margin-left: 4
 
   Settings
     id: settings
-    anchors.left: prev.right
+    anchors.left: verticalSep.right
     anchors.top: parent.top
     anchors.right: parent.right
-    anchors.bottom: next.top
+    anchors.bottom: separator.top
     margin: 3
     margin-left: 6
     margin-bottom: 4
