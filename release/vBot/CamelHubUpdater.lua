@@ -1,11 +1,11 @@
--- Camel Hub Updater SAFE bootstrap v1.0.8 (no-cache)
+-- Camel Hub Updater SAFE bootstrap v1.0.14 (no-cache)
 -- Loaded under pcall by the ordered Camel Hub loader so updater errors cannot stop the bot core.
 -- Character storage/profiles/routes/icons remain outside the common whitelist.
 
 setDefaultTab("Main")
 
 CamelHubUpdater = CamelHubUpdater or {}
-CamelHubUpdater.clientVersion = "1.0.8-safe"
+CamelHubUpdater.clientVersion = "1.0.14-safe"
 
 local panelKey = "camelHubUpdater"
 storage[panelKey] = storage[panelKey] or {}
@@ -15,8 +15,6 @@ cfg.manifestUrl = "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-
 if cfg.autoReload == nil then cfg.autoReload = true end
 
 local COMMON_PATHS = {
-  -- Buffguild.lua is intentionally NOT common-managed: Gampi has a validated character-specific bridge.
-  -- CamelGuildLegacyFix.lua is retired/inactive and must not be auto-managed.
   ["_Loader.lua"] = true,
   ["cavebot/actions.lua"] = true,
   ["cavebot/bank.lua"] = true,
@@ -61,10 +59,13 @@ local COMMON_PATHS = {
   ["vBot/BotServer.lua"] = true,
   ["vBot/BotServer.otui"] = true,
   ["vBot/CamelPots.lua"] = true,
+  ["vBot/CamelSlowPM.lua"] = true,
   ["vBot/CamelImmortal.lua"] = true,
   ["vBot/CamelImmortal.otui"] = true,
+  ["vBot/Buffguild.lua"] = true,
   ["vBot/CamelAnalyzerLauncher.lua"] = true,
   ["vBot/CamelCommonMacros.lua"] = true,
+  ["vBot/RescueSystem.lua"] = true,
   ["vBot/Conditions.lua"] = true,
   ["vBot/Conditions.otui"] = true,
   ["vBot/Containers.lua"] = true,
@@ -104,6 +105,7 @@ local COMMON_PATHS = {
   ["vBot/hold_target.lua"] = true,
   ["vBot/ingame_editor.lua"] = true,
   ["vBot/ingame_editor.otui"] = true,
+  ["vBot/CamelGuildLegacyFix.lua"] = true,
   ["vBot/items.lua"] = true,
   ["vBot/main.lua"] = true,
   ["vBot/new_cavebot_lib.lua"] = true,
@@ -123,7 +125,6 @@ local COMMON_PATHS = {
   ["vBot/vlib.lua"] = true,
   ["vBot/xeno_menu.lua"] = true,
   ["zFreeScripts/zAutoBuff.lua"] = true,
-  ["zFreeScripts/z_Auto-Party.lua"] = true,
 }
 
 local function normalizePath(path)
@@ -228,20 +229,20 @@ end
 
 local ui = setupUI([[
 Panel
-  height: 78
+  height: 58
   margin-top: 2
 
   Label
     id: title
     anchors.top: parent.top
     anchors.left: parent.left
-    width: 112
+    width: 82
     height: 18
     text-align: center
     font: verdana-11px-rounded
     background: #b5121b
     color: #ffffff
-    text: CAMEL UPDATER
+    text: UPDATER
 
   Button
     id: check
@@ -262,29 +263,18 @@ Panel
     text: Update
 
   Label
-    id: connection
+    id: status
     anchors.top: title.bottom
     anchors.left: parent.left
     anchors.right: parent.right
     margin-top: 3
-    height: 17
-    text-align: center
-    color: #d7d7d7
-    text: GitHub conectado
-
-  Label
-    id: status
-    anchors.top: connection.bottom
-    anchors.left: parent.left
-    anchors.right: parent.right
-    margin-top: 2
-    height: 35
+    height: 34
     text-align: center
     text-wrap: true
     font: verdana-11px-rounded
     background: #292A2A
     color: #cfd3d7
-    text: Camel Hub 1.0.1
+    text: Listo
 ]])
 
 local lastManifest = nil
@@ -432,4 +422,6 @@ ui.update.onClick = function()
   end
 end
 
-setStatus("Camel Hub " .. tostring(cfg.version) .. " | Updater " .. CamelHubUpdater.clientVersion, "#9dd1ce")
+setStatus("Listo", "#9dd1ce")
+
+-- Rescue System is loaded by the ordered loader directly above Dropper.
