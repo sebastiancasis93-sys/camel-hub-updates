@@ -7,7 +7,8 @@
     "Guild Sync integra la guild actual como Friends y Godslayers/Walkers como Enemies + Blacklist.",
     "Rescue System reduce trafico de PM: SOS repetido a 20s, sync completo espaciado y cambios pequenos por delta.",
     "CamelSlowPM serializa mensajes no urgentes para reducir bursts y riesgo de penalizacion de speed.",
-    "Player List FIX1 corrige el error table.insert causado por trim/gsub y mantiene CaveBot, TargetBot y HP cargando normalmente."
+    "Player List FIX1 corrige el error table.insert causado por trim/gsub y mantiene CaveBot, TargetBot y HP cargando normalmente.",
+    "1.0.14 no administra CaveBot actions/cavebot para preservar los ajustes MovementSafe/StepDirection del bot instalado."
   ],
   "files": [
     {
@@ -16,20 +17,6 @@
       "normalizedSize": 3633,
       "adler32": "000b9334",
       "sha256": "206014f8ee16f7c8dba9c65a658613d9952d389e8875145c434fe500050cc89f"
-    },
-    {
-      "path": "cavebot/actions.lua",
-      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/actions.lua",
-      "normalizedSize": 17126,
-      "adler32": "c49623d2",
-      "sha256": "df20d2594027a37476d87214d20c2b75848a0c6a05b3e73412eff87074a8fbfb"
-    },
-    {
-      "path": "cavebot/cavebot.lua",
-      "url": "https://raw.githubusercontent.com/sebastiancasis93-sys/camel-hub-updates/main/release/cavebot/cavebot.lua",
-      "normalizedSize": 15678,
-      "adler32": "e6e6becd",
-      "sha256": "1e314ad4fd9ab1ecc12abe23128fbb8a1f9f39c6d1a8da287bc84fbfb8f0676b"
     },
     {
       "path": "vBot/AthalarIcons.lua",
